@@ -7,6 +7,7 @@ from .store import init_db
 from .executor import ensure_project, upsert_tasks
 from .planner import plan_from_intent
 from .echo import engine
+from .adapters.render.dummy import DummyRender
 
 app = typer.Typer(add_completion=False)
 
@@ -48,6 +49,15 @@ def plan(project: str, context: str):
                 {"project": project, "tasks": titles}, ensure_ascii=False, indent=2
             )
         )
+
+    asyncio.run(run())
+
+
+@app.command()
+def render(prompt: str):
+    async def run():
+        r = await DummyRender().render(prompt)
+        print(json.dumps({"ok": True, "path": str(r.path)}, ensure_ascii=False))
 
     asyncio.run(run())
 
