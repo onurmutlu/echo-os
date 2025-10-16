@@ -8,6 +8,7 @@ from .executor import ensure_project, upsert_tasks
 from .planner import plan_from_intent
 from .echo import engine
 from .adapters.render.dummy import DummyRender
+from .adapters.render.comfyui import ComfyUIRender
 
 app = typer.Typer(add_completion=False)
 
@@ -54,10 +55,39 @@ def plan(project: str, context: str):
 
 
 @app.command()
-def render(prompt: str):
+def render(prompt: str, project: str = "Default", adapter: str = "dummy"):
     async def run():
-        r = await DummyRender().render(prompt)
-        print(json.dumps({"ok": True, "path": str(r.path)}, ensure_ascii=False))
+        ad = DummyRender() if adapter == "dummy" else ComfyUIRender()
+        res = await ad.render(project=project, prompt=prompt)
+        print(
+            json.dumps(
+                {"ok": True, "adapter": ad.name, "path": str(res.path)},
+                ensure_ascii=False,
+            )
+        )
+
+    asyncio.run(run())
+
+
+@app.command()
+def batch(project: str, file: str, adapter: str = "dummy"):
+    """
+    file: satır başı bir prompt
+    """
+    import asyncio
+    import json
+
+    async def run():
+        ad = DummyRender() if adapter == "dummy" else ComfyUIRender()
+        out = []
+        for p in Path(file).read_text().splitlines():
+            if not p.strip():
+                continue
+            res = await ad.render(project=project, prompt=p.strip())
+            out.append(str(res.path))
+        print(json.dumps({"ok": True, "paths": out}, ensure_ascii=False))
+
+    from pathlib import Path
 
     asyncio.run(run())
 

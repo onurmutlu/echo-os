@@ -6,6 +6,7 @@ from ..store import session_scope, init_db
 from ..executor import ensure_project, upsert_tasks
 from ..planner import plan_from_intent
 from ..models import EchoLog, Project, Task, TaskStatus, Priority
+from . import render as render_router
 
 router = APIRouter()
 
@@ -141,3 +142,7 @@ async def list_tasks(project_id: int | None = None):
             }
             for t in res.all()
         ]
+
+
+# Include render router
+router.include_router(render_router.router, prefix="")

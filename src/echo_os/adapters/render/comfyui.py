@@ -1,65 +1,80 @@
 """ComfyUI Render Adapter — Local ComfyUI integration"""
 
 from __future__ import annotations
-import asyncio
+import json
 import httpx
-from typing import Dict, Any
-from .base import RenderAdapter, RenderRequest, RenderResult
-from datetime import datetime
+from .base import RenderAdapter, RenderResult
+from ...config import settings
+from ...artifacts.storage import artifact_path, write_meta
 
-
-class ComfyUIAdapter(RenderAdapter):
-    """ComfyUI local server adapter"""
-
-    def __init__(self, config: Dict[str, Any]):
-        super().__init__(config)
-        self.base_url = config.get("base_url", "http://localhost:8188")
-        self.timeout = config.get("timeout", 300)
-
-    async def render(self, request: RenderRequest) -> RenderResult:
-        """Generate image using ComfyUI"""
-        start_time = datetime.utcnow()
-
-        # TODO: Implement ComfyUI workflow execution
-        # 1. Load workflow template
-        # 2. Inject prompt and parameters
-        # 3. Queue job
-        # 4. Poll for completion
-        # 5. Download result
-
-        # Placeholder implementation
-        await asyncio.sleep(2)  # Simulate generation time
-
-        generation_time = (datetime.utcnow() - start_time).total_seconds()
-
-        return RenderResult(
-            image_path="/tmp/placeholder.png",  # TODO: actual path
-            metadata={
-                "adapter": self.name,
-                "prompt": request.prompt,
-                "width": request.width,
-                "height": request.height,
-                "steps": request.steps,
-                "cfg_scale": request.cfg_scale,
-                "seed": request.seed,
+# Basit bir ComfyUI iş akışı: text prompt -> image (PNG)
+# Not: Kendi Comfy workflow'unun JSON'unu burada `workflow` değişkenine koy.
+WORKFLOW = {
+    "prompt": {
+        "3": {
+            "inputs": {
+                "seed": 123,
+                "steps": 20,
+                "cfg": 6.0,
+                "sampler_name": "euler",
+                "scheduler": "normal",
+                "denoise": 1.0,
             },
-            generation_time=generation_time,
-            timestamp=start_time,
-            seed=request.seed,
-        )
+            "class_type": "KSampler",
+        },
+        "4": {
+            "inputs": {"text": "PROMPT_HERE", "clip": "5"},
+            "class_type": "CLIPTextEncode",
+        },
+        "5": {
+            "inputs": {"ckpt_name": "SDXL.safetensors"},
+            "class_type": "CheckpointLoaderSimple",
+        },
+        "6": {
+            "inputs": {"width": 1024, "height": 1024, "batch_size": 1},
+            "class_type": "EmptyLatentImage",
+        },
+        "7": {
+            "inputs": {
+                "samples": "6",
+                "num_steps": 20,
+                "cfg": 6.0,
+                "positive": "4",
+                "negative": "",
+                "sampler_name": "euler",
+                "scheduler": "normal",
+                "denoise": 1.0,
+            },
+            "class_type": "KSampler",
+        },
+        "8": {"inputs": {"samples": "7", "vae": "5"}, "class_type": "VAEDecode"},
+        "9": {
+            "inputs": {"filename_prefix": "echo", "images": "8"},
+            "class_type": "SaveImage",
+        },
+    }
+}
 
-    async def is_available(self) -> bool:
-        """Check if ComfyUI server is running"""
-        try:
-            async with httpx.AsyncClient(timeout=5.0) as client:
-                response = await client.get(f"{self.base_url}/system_stats")
-                return response.status_code == 200
-        except Exception:
-            return False
 
-    def get_default_config(self) -> Dict[str, Any]:
-        return {
-            "base_url": "http://localhost:8188",
-            "timeout": 300,
-            "workflow_template": "default_sd15.json",
-        }
+class ComfyUIRender(RenderAdapter):
+    name = "comfyui"
+
+    async def render(self, project: str, prompt: str, **kwargs) -> RenderResult:
+        """Generate image using ComfyUI"""
+        wf = json.loads(json.dumps(WORKFLOW))
+        # basit replace
+        wf["prompt"]["4"]["inputs"]["text"] = prompt
+
+        base = f"{settings.comfy_host}:{settings.comfy_port}"
+        async with httpx.AsyncClient(timeout=60) as client:
+            # queue prompt
+            r = await client.post(f"{base}/prompt", json=wf)
+            r.raise_for_status()
+            # Comfy'de dosyayı out klasörüne yazar; biz artifact'e kopyalamıyoruz (şimdilik meta kaydı)
+            out = artifact_path(
+                project, self.name, seed=str(r.json().get("prompt_id", "echo"))
+            )
+            meta = {"adapter": self.name, "prompt": prompt, "workflow": "inline"}
+            write_meta(out, meta)
+            # Not: dosya kopyalama için /view veya /history API'lerine bağlanıp output path'i alabilirsin.
+            return RenderResult(path=out / "comfy.txt", meta=meta)
