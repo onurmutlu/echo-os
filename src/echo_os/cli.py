@@ -136,5 +136,136 @@ def asr(file_path: str):
     asyncio.run(run())
 
 
+@app.command()
+def pipeline(
+    project: str,
+    prompt: str,
+    text: str = "",
+    voice: str = "alloy",
+    adapter: str = "openai-image",
+    size: str = "1024x1024",
+    log_code: str = "ECHO.LOG/005",
+    log_title: str = "",
+):
+    """Complete pipeline: render → tts → log in one command"""
+    import asyncio
+    import json
+    import httpx
+
+    async def run():
+        results = {"images": [], "audios": [], "logs": []}
+
+        # 1) Generate image
+        if prompt:
+            if adapter == "openai-image":
+                res = await OpenAIImageRender().render(
+                    project=project, prompt=prompt, size=size
+                )
+            else:
+                ad = DummyRender() if adapter == "dummy" else ComfyUIRender()
+                res = await ad.render(project=project, prompt=prompt)
+            results["images"].append(str(res.path))
+
+        # 2) Generate audio
+        if text:
+            audio_path = await tts_generate(project=project, text=text, voice=voice)
+            results["audios"].append(str(audio_path))
+
+        # 3) Log to API
+        if results["images"] or results["audios"]:
+            log_data = {
+                "code": log_code,
+                "title": log_title or f"{project} Pipeline",
+                "content": f"Generated {len(results['images'])} images, {len(results['audios'])} audios",
+            }
+
+            try:
+                async with httpx.AsyncClient() as client:
+                    response = await client.post(
+                        "http://127.0.0.1:8081/api/log",
+                        json=log_data,
+                        headers={"content-type": "application/json"},
+                    )
+                    if response.status_code == 200:
+                        results["logs"].append("logged to API")
+                    else:
+                        results["logs"].append(f"API error: {response.status_code}")
+            except Exception as e:
+                results["logs"].append(f"API error: {str(e)}")
+
+        print(json.dumps({"ok": True, "pipeline": results}, ensure_ascii=False))
+
+    asyncio.run(run())
+
+
+@app.command()
+def batch_pipeline(
+    project: str,
+    prompts_file: str,
+    text_template: str = "Generated {prompt}",
+    voice: str = "alloy",
+    adapter: str = "openai-image",
+    size: str = "1024x1024",
+):
+    """Batch pipeline: process multiple prompts from file"""
+    import asyncio
+    import json
+    import httpx
+
+    async def run():
+        results = {"batches": []}
+
+        # Read prompts from file
+        with open(prompts_file, "r") as f:
+            prompts = [line.strip() for line in f if line.strip()]
+
+        for i, prompt in enumerate(prompts, 1):
+            batch_result = {"prompt": prompt, "images": [], "audios": [], "logs": []}
+
+            # Generate image
+            if adapter == "openai-image":
+                res = await OpenAIImageRender().render(
+                    project=project, prompt=prompt, size=size
+                )
+            else:
+                ad = DummyRender() if adapter == "dummy" else ComfyUIRender()
+                res = await ad.render(project=project, prompt=prompt)
+            batch_result["images"].append(str(res.path))
+
+            # Generate audio
+            text = text_template.format(prompt=prompt, index=i)
+            audio_path = await tts_generate(project=project, text=text, voice=voice)
+            batch_result["audios"].append(str(audio_path))
+
+            # Log to API
+            log_data = {
+                "code": f"ECHO.LOG/{i:03d}",
+                "title": f"Batch {i}: {prompt[:50]}...",
+                "content": f"Generated image and audio for: {prompt}",
+            }
+
+            try:
+                async with httpx.AsyncClient() as client:
+                    response = await client.post(
+                        "http://127.0.0.1:8081/api/log",
+                        json=log_data,
+                        headers={"content-type": "application/json"},
+                    )
+                    if response.status_code == 200:
+                        batch_result["logs"].append("logged to API")
+                    else:
+                        batch_result["logs"].append(
+                            f"API error: {response.status_code}"
+                        )
+            except Exception as e:
+                batch_result["logs"].append(f"API error: {str(e)}")
+
+            results["batches"].append(batch_result)
+
+        print(json.dumps({"ok": True, "batch_pipeline": results}, ensure_ascii=False))
+
+    asyncio.run(run())
+
+
 if __name__ == "__main__":
     app()
