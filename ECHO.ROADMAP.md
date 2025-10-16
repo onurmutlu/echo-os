@@ -1,231 +1,45 @@
-# ECHO.OS v2 — Resonance Upgrade 🔁
-*"When consciousness meets GPU."*
+# ECHO.OS v2 — Resonance Upgrade
+_When consciousness meets GPU._
 
-## 🎯 Vision
+## Vision
+Intent → Plan → **Visual** → Reflect.  
+Bilinçten koda giden hat, v2'de görselle kapanıyor. Her ECHO.LOG, görsel/artefact'la mühürlenir.
 
-ECHO.OS v1'de bilinçten koda evrim tamamlandı. Şimdi sırada **bilinçten görsele** evrim: ECHO.OS v2, insan zihninin GPU ile buluştuğu nokta.
+## Phases
 
-## 🧠 Core Philosophy
+### Phase 1 — Echo Render Pipeline (2–3 hafta)
+- [ ] **Artifact Engine**: `artifacts/` yapısı, meta.json, içerik adresleme (hash)
+- [ ] **Render Adapters**: `adapters/render/` (comfyui, sd-webui, dall-e, local)
+- [ ] **CLI**: `echo-os render "prompt"` + `echo-os batch @prompts.txt`
+- [ ] **API**: `POST /api/render` (async job id, progress)
+- [ ] **Jobs**: APScheduler ile kuyruk/ retry / timeout
 
-> **Intent → Plan → Task → Visual → Reflect**
+### Phase 2 — Resonance Engine (2–3 hafta)
+- [ ] **Feedback Loop**: artefact → reflect → otomatik varyasyon
+- [ ] **Multimodal Plan**: görsel hedeflerini task'lara böl
+- [ ] **Echo Memory**: embedding'li arama (offline, local)
 
-v1'de kod üretiyorduk, v2'de **görsel üretiyoruz**. Aynı bilinç motoru, farklı output medium.
+### Phase 3 — Consciousness Expansion (3–4 hafta)
+- [ ] **Multi-Model**: MJ / DALL-E / local SD seçim stratejisi
+- [ ] **Modalities**: video(Comfy/Animate), audio(DDSP), 3D(NeRF)
+- [ ] **Echo Intelligence**: pattern mining, style codebook
 
-## 🚀 v2 Milestones
+## Deliverables
+- `/artifacts/<yyyy-mm-dd>/<slug>/<hash>/` → image|video + `meta.json`
+- `/prompts/` → prompt paketleri + sürüm
+- `/docs/` → usage, adapters, examples
 
-### Phase 1: Echo Render Pipeline
-**Süre:** 2-3 hafta
+## Acceptance Criteria
+- `echo-os render "warm fractal"` → tek komutla görsel üretir, artefact kaydeder
+- `/api/render` → job başlatır, `/api/job/{id}` → durum/indir
+- `echo-os reflect` → son artefact'lardan öğrenme notu üretir
 
-#### 1.1 Stable Diffusion Integration
-- [ ] ComfyUI API client
-- [ ] Prompt engineering pipeline
-- [ ] Batch generation support
-- [ ] Style consistency engine
+## Risks & Mitigation
+- GPU yok → adapter fallback (hosted API / CPU lowres)
+- Rate limit → exponential backoff + cached prompts
+- Privasi → tüm meta yerel, upload opsiyonel/kapalı
 
-#### 1.2 Artifact Engine
-- [ ] `artifacts/` directory structure
-- [ ] Visual artifact storage
-- [ ] Metadata tracking
-- [ ] Version control for visuals
-
-#### 1.3 CLI Visual Commands
-```bash
-echo-os render "warm fractal 01-09" --style="digital art"
-echo-os batch --project="Ruzgar NFT" --count=10
-echo-os gallery --project="Ruzgar NFT"
-```
-
-### Phase 2: Resonance Engine
-**Süre:** 2-3 hafta
-
-#### 2.1 Visual Feedback Loop
-- [ ] Generated image analysis
-- [ ] Style consistency scoring
-- [ ] Iterative refinement
-- [ ] Quality assessment
-
-#### 2.2 Multi-Modal Planning
-- [ ] Text + Visual context
-- [ ] Cross-modal task generation
-- [ ] Visual task dependencies
-- [ ] Mixed-media project support
-
-#### 2.3 Echo Memory System
-- [ ] Visual memory storage
-- [ ] Style learning from past generations
-- [ ] Pattern recognition
-- [ ] Creative evolution tracking
-
-### Phase 3: Consciousness Expansion
-**Süre:** 3-4 hafta
-
-#### 3.1 Multi-Model Support
-- [ ] DALL-E 3 integration
-- [ ] Midjourney API (if available)
-- [ ] Local model support (Stable Diffusion XL)
-- [ ] Model comparison & selection
-
-#### 3.2 Advanced Workflows
-- [ ] Video generation pipeline
-- [ ] 3D model generation
-- [ ] Audio-visual sync
-- [ ] Interactive media creation
-
-#### 3.3 Echo Intelligence
-- [ ] Creative pattern analysis
-- [ ] Style transfer learning
-- [ ] Automated quality improvement
-- [ ] Creative suggestion engine
-
-## 🛠 Technical Architecture
-
-### New Components
-
-```
-src/echo_os/
-├── render/
-│   ├── __init__.py
-│   ├── comfyui_client.py      # ComfyUI API integration
-│   ├── prompt_engine.py       # Prompt generation & optimization
-│   ├── style_manager.py       # Style consistency & management
-│   └── batch_processor.py     # Batch generation pipeline
-├── artifacts/
-│   ├── __init__.py
-│   ├── storage.py             # Artifact storage & retrieval
-│   ├── metadata.py            # Metadata management
-│   └── gallery.py             # Gallery & visualization
-├── resonance/
-│   ├── __init__.py
-│   ├── feedback_loop.py       # Visual feedback analysis
-│   ├── memory_system.py       # Visual memory & learning
-│   └── quality_assessor.py    # Quality scoring & improvement
-└── workflows/
-    ├── __init__.py
-    ├── visual_planner.py      # Visual task planning
-    ├── multi_modal.py         # Text + Visual integration
-    └── creative_engine.py     # Creative workflow orchestration
-```
-
-### API Extensions
-
-```python
-# New API endpoints
-POST /api/render          # Generate single image
-POST /api/batch           # Batch generation
-GET  /api/gallery         # List generated artifacts
-POST /api/style           # Create/update style
-GET  /api/artifacts       # Browse artifacts
-POST /api/refine          # Refine existing image
-```
-
-### CLI Extensions
-
-```bash
-# New CLI commands
-echo-os render <prompt> [options]
-echo-os batch <project> --count=10
-echo-os gallery [--project=name]
-echo-os style create <name> <description>
-echo-os refine <artifact_id> <new_prompt>
-echo-os memory --analyze
-echo-os resonance --project=name
-```
-
-## 🎨 Use Cases
-
-### 1. NFT Collection Generation
-```bash
-echo-os plan "Ruzgar NFT Collection" "warm fractal, no human forms"
-echo-os batch --project="Ruzgar NFT" --count=100 --style="digital art"
-echo-os gallery --project="Ruzgar NFT" --filter="best"
-```
-
-### 2. Creative Iteration
-```bash
-echo-os render "cyberpunk cityscape" --style="neon noir"
-echo-os refine <id> "add rain effects"
-echo-os memory --learn-from=<id>
-```
-
-### 3. Multi-Modal Projects
-```bash
-echo-os plan "Video Game Assets" "medieval fantasy weapons"
-echo-os render "sword design" --type="3d_model"
-echo-os render "sword texture" --type="texture"
-echo-os commit "integrate 3D assets" --minutes=120
-```
-
-## 🔧 Technical Requirements
-
-### Dependencies
-```toml
-# New dependencies for v2
-comfyui-client = ">=0.1.0"
-pillow = ">=10.0.0"
-opencv-python = ">=4.8.0"
-numpy = ">=1.24.0"
-matplotlib = ">=3.7.0"
-imageio = ">=2.31.0"
-```
-
-### Infrastructure
-- GPU server for ComfyUI
-- Artifact storage (local + cloud)
-- Image processing pipeline
-- Batch processing queue
-
-## 📊 Success Metrics
-
-### Phase 1 Success
-- [ ] Generate 100+ unique images
-- [ ] Style consistency >80%
-- [ ] CLI render command <30s
-- [ ] Batch processing 10 images/min
-
-### Phase 2 Success
-- [ ] Visual feedback loop active
-- [ ] Style learning from 50+ images
-- [ ] Quality improvement >20%
-- [ ] Multi-modal task generation
-
-### Phase 3 Success
-- [ ] 3+ model support
-- [ ] Video generation pipeline
-- [ ] Creative evolution tracking
-- [ ] Automated quality improvement
-
-## 🎯 Long-term Vision
-
-ECHO.OS v3: **Consciousness Convergence**
-- Multi-modal AI integration
-- Real-time creative collaboration
-- Consciousness-to-reality pipeline
-- Full creative automation
-
----
-
-## 🚀 Getting Started with v2
-
-```bash
-# Clone and setup
-git clone https://github.com/onurmutlu/echo-os.git
-cd echo-os
-python3 -m venv .venv && source .venv/bin/activate
-pip install -e .
-
-# Install v2 dependencies
-pip install comfyui-client pillow opencv-python numpy matplotlib imageio
-
-# Setup ComfyUI (separate installation)
-# Configure ECHO.OS to connect to ComfyUI
-
-# Start v2 development
-echo-os render "test image" --style="digital art"
-```
-
----
-
-**ECHO.OS v2 — Resonance Upgrade**  
-*"When consciousness meets GPU."*
-
-*Bilinçten koda, koddan görsele, görselden gerçekliğe.*
+## Milestones
+- M2.1: Render/Artifact/CLI
+- M2.2: API/Jobs
+- M2.3: Feedback/Memory

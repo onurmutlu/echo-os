@@ -1,0 +1,17 @@
+name: Feature
+description: New capability / enhancement
+labels: ["type:feature", "priority:triage"]
+body:
+  - type: input
+    id: objective
+    attributes: { label: Objective, placeholder: "One crisp sentence" }
+    validations: { required: true }
+  - type: textarea
+    id: context
+    attributes: { label: Context, placeholder: "Why now? Who benefits?" }
+  - type: textarea
+    id: acceptance
+    attributes: { label: Acceptance Criteria, placeholder: "- [ ] CLI does X\n- [ ] API returns Y" }
+  - type: textarea
+    id: tasks
+    attributes: { label: Tasks, placeholder: "- [ ] ..." }

@@ -1,0 +1,13 @@
+name: Epic
+description: Multi-sprint initiative
+labels: ["type:epic"]
+body:
+  - type: input
+    id: goal
+    attributes: { label: Goal }
+  - type: textarea
+    id: scope
+    attributes: { label: Scope, placeholder: "- Feature A\n- Feature B" }
+  - type: textarea
+    id: roadmap
+    attributes: { label: Roadmap, placeholder: "- M2.1 …\n- M2.2 …" }

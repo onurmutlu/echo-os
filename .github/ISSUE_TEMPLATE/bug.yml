@@ -1,0 +1,17 @@
+name: Bug
+description: Something broke
+labels: ["type:bug", "priority:triage"]
+body:
+  - type: textarea
+    id: repro
+    attributes: { label: Repro, placeholder: "Steps to reproduce…" }
+    validations: { required: true }
+  - type: input
+    id: env
+    attributes: { label: Env, placeholder: "OS, Python, commit hash" }
+  - type: textarea
+    id: expected
+    attributes: { label: Expected vs Actual }
+  - type: textarea
+    id: logs
+    attributes: { label: Logs/Screens }
