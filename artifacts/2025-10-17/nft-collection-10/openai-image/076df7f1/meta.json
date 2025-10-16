@@ -1,0 +1,6 @@
+{
+  "adapter": "openai-image",
+  "prompt": "warm fractal resonance 08 — abstract, no text, NFT-grade detail, crystal formations",
+  "size": "1024x1024",
+  "model": "dall-e-3"
+}

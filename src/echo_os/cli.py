@@ -81,7 +81,12 @@ def batch(project: str, file: str, adapter: str = "dummy"):
     import json
 
     async def run():
-        ad = DummyRender() if adapter == "dummy" else ComfyUIRender()
+        if adapter == "openai-image":
+            ad = OpenAIImageRender()
+        elif adapter == "dummy":
+            ad = DummyRender()
+        else:
+            ad = ComfyUIRender()
         out = []
         for p in Path(file).read_text().splitlines():
             if not p.strip():

@@ -1,0 +1,6 @@
+{
+  "adapter": "openai-image",
+  "prompt": "warm fractal resonance 06 — abstract, no text, NFT-grade detail, mandala geometry",
+  "size": "1024x1024",
+  "model": "dall-e-3"
+}
