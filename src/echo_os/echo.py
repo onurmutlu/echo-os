@@ -1,12 +1,13 @@
 from __future__ import annotations
 from dataclasses import dataclass
-from typing import Callable, Awaitable
+
 
 @dataclass
 class Signals:
     calm: float = 0.0
     clarity: float = 0.0
     energy: float = 0.0
+
 
 class ConsciousnessEngine:
     def __init__(self):
@@ -29,5 +30,6 @@ class ConsciousnessEngine:
         r = {"signals": self.signals.__dict__}
         self.signals = Signals()  # reset cycle
         return r
+
 
 engine = ConsciousnessEngine()

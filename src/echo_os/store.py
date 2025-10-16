@@ -10,9 +10,11 @@ DATABASE_URL = f"sqlite+aiosqlite:///{settings.db_path}"
 engine = create_async_engine(DATABASE_URL, future=True)
 AsyncSessionLocal = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 
+
 async def init_db() -> None:
     async with engine.begin() as conn:
         await conn.run_sync(SQLModel.metadata.create_all)
+
 
 @asynccontextmanager
 async def session_scope():

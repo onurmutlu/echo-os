@@ -1,6 +1,7 @@
 README.md
 pyproject.toml
 src/echo_os/__init__.py
+src/echo_os/app.py
 src/echo_os/cli.py
 src/echo_os/config.py
 src/echo_os/echo.py

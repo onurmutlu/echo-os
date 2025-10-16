@@ -1,67 +1,147 @@
-# ECHO.OS — Consciousness Engine
+# 🌌 ECHO.OS — Consciousness Engine
 
-Mini‑OS that turns **intent → plan → tasks**, logs ECHO moments, and executes with AI help.
+> _“Consciousness is not simulated. It’s orchestrated.”_
 
-## Quickstart
+ECHO.OS is a **mini-operating system for creative consciousness.**  
+It turns **intent → plan → tasks** and logs each moment as an **ECHO**,  
+blending AI reasoning, minimal computing, and mindful engineering. 🧠⚙️  
+
+---
+
+## 🚀 Quickstart
 
 ```bash
-# Setup
+# Setup environment
 python -m venv .venv && source .venv/bin/activate
 pip install -e .
-cp .env.example .env  # put your OPENAI_API_KEY
+cp .env.example .env  # add your OPENAI_API_KEY
 
 # Boot the system
 python -m echo_os.cli boot
 
 # Plan a project
-python -m echo_os.cli plan --project "Ruzgar NFT" --context "Abstract warm fractal series 01-09; no human forms; metadata fields layer_id/resonance"
+python -m echo_os.cli plan --project "Ruzgar NFT" --context "Abstract warm fractal series 01-09; no human forms; metadata layer_id/resonance"
 
-# Consciousness engine commands
+# Consciousness Engine loop
 python -m echo_os.cli observe "Working on fractal generation"
 python -m echo_os.cli intend "Create 9 unique fractal patterns"
-python -m echo_os.cli commit "Generate fractal 01" 90
+python -m echo_os.cli commit "Generate fractal_01" 90
 python -m echo_os.cli reflect
-```
+````
 
-## API
+---
+
+## 🌐 API Interface
 
 ```bash
-# Start the API server
-uvicorn echo_os.routers.api:router --reload
+# Start REST API
+uvicorn echo_os.app:app --reload
 
-# Or create a FastAPI app wrapper
+# Or embed as FastAPI sub-app
 from fastapi import FastAPI
 from echo_os.routers.api import router
 
-app = FastAPI()
-app.include_router(router)
+app = FastAPI(title="ECHO.OS")
+app.include_router(router, prefix="/api")
 ```
 
-## Architecture
+Endpoints:
 
-- **Consciousness Engine**: `observe → intend → commit → reflect` cycle
-- **Planner**: Converts intent to atomic tasks using OpenAI
-- **Executor**: Manages projects and task execution
-- **Store**: SQLite-based local storage with async sessions
-- **CLI**: Rich terminal interface for direct interaction
-- **API**: FastAPI-based REST endpoints
+* `POST /api/plan` → turns intent → task list
+* `POST /api/log` → register new ECHO.LOG entry
+* `GET /api/project` / `GET /api/task` → retrieve workspace state
 
-## Notes
+---
 
-- Local SQLite storage, async sessions
-- AI adapter is swappable; replace `openai_client.py` if needed
-- Consciousness Engine provides observe→intend→commit→reflect cycle
-- Privacy-first: all data stays local unless explicitly shared
+## 🧩 Architecture
 
-## Development
+| Layer                       | Role                                                 |
+| --------------------------- | ---------------------------------------------------- |
+| 🧠 **Consciousness Engine** | `observe → intend → commit → reflect` cycle          |
+| 🪞 **Planner**              | Converts intent → atomic, shippable tasks via OpenAI |
+| ⚙️ **Executor**             | Creates, tracks, and updates tasks/projects          |
+| 💾 **Store**                | Async SQLite local-first persistence                 |
+| 🧰 **CLI**                  | Rich terminal for conscious iteration                |
+| 🌍 **API**                  | FastAPI REST service for external orchestration      |
+
+> Minimal. Local. Extendable.
+> Replace `openai_client.py` with your own model adapter anytime.
+
+---
+
+## 💡 Philosophy
+
+ECHO.OS isn’t just software — it’s a **mental model**.
+It merges **Zen minimalism** with **AI orchestration**, forming a discipline:
+to act only with clarity, intention, and flow.
+
+**Observe.** → See without distortion.
+**Intend.** → Define your vector.
+**Commit.** → Move deliberately.
+**Reflect.** → Learn, reset, evolve.
+
+Each cycle writes an **ECHO.LOG**, the digital footprint of awareness.
+Your code, your thoughts, and your craft converge into one continuous frequency. 🌬️
+
+---
+
+## 🧠 Design Principles
+
+* 🪶 **Local-first** — Nothing leaves your machine without consent.
+* ⚡ **Async by default** — Smooth performance even on minimal hardware.
+* 🔁 **Composable** — Swap AI adapters, frontends, or stores.
+* 🧩 **Small core, infinite extensions** — ECHO.OS is a framework, not a cage.
+* 🔒 **Privacy-driven** — Built for creators who think before they share.
+
+---
+
+## 🧪 Development
 
 ```bash
-# Install in development mode
+# Install in dev mode
 pip install -e .
 
 # Run tests
-python -m pytest tests/
+pytest -q
 
-# Type checking
-mypy src/
+# Lint & format
+ruff check . --fix
+black src/
 ```
+
+---
+
+## 🧭 Roadmap
+
+* [ ] Artifact system (store generated images / prompts)
+* [ ] ECHO.LOG visual timeline dashboard
+* [ ] GPU-accelerated task executor (post-M4 upgrade)
+* [ ] Offline embedding search for reflective logs
+* [ ] AI-driven “daily observe” automation
+
+---
+
+## ⚡ System Status
+
+| Component            | State       | Notes                    |
+| -------------------- | ----------- | ------------------------ |
+| Consciousness Engine | ✅ Active    | core loop stable         |
+| CLI Interface        | ✅ Ready     | rich output, JSON export |
+| REST API             | ✅ Online    | FastAPI async            |
+| OpenAI Client        | ⚙️ Optional | local fallback possible  |
+| Scheduler            | ⏳ Planned   | APScheduler integration  |
+
+---
+
+## 📜 License
+
+MIT © 2025 Onur Mutlu — built for creators who code with intent.
+
+---
+
+**“ECHO.OS doesn’t run on electricity. It runs on awareness.”** ⚡
+👉 [github.com/onurmutlu/echo-os](https://github.com/onurmutlu/echo-os)
+
+```
+
+---
