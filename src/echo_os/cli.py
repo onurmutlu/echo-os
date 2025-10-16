@@ -9,6 +9,9 @@ from .planner import plan_from_intent
 from .echo import engine
 from .adapters.render.dummy import DummyRender
 from .adapters.render.comfyui import ComfyUIRender
+from .adapters.render.openai_image import OpenAIImageRender
+from .adapters.audio.openai_tts import tts_generate
+from .adapters.audio.openai_asr import transcribe
 
 app = typer.Typer(add_completion=False)
 
@@ -88,6 +91,47 @@ def batch(project: str, file: str, adapter: str = "dummy"):
         print(json.dumps({"ok": True, "paths": out}, ensure_ascii=False))
 
     from pathlib import Path
+
+    asyncio.run(run())
+
+
+@app.command()
+def render_openai(prompt: str, project: str = "Default", size: str = "1024x1024"):
+    """Generate image using OpenAI Images API"""
+    import asyncio
+    import json
+
+    async def run():
+        res = await OpenAIImageRender().render(
+            project=project, prompt=prompt, size=size
+        )
+        print(json.dumps({"ok": True, "path": str(res.path)}, ensure_ascii=False))
+
+    asyncio.run(run())
+
+
+@app.command()
+def tts(text: str, project: str = "Default", voice: str = "alloy"):
+    """Generate speech from text using OpenAI TTS"""
+    import asyncio
+    import json
+
+    async def run():
+        path = await tts_generate(project=project, text=text, voice=voice)
+        print(json.dumps({"ok": True, "path": str(path)}, ensure_ascii=False))
+
+    asyncio.run(run())
+
+
+@app.command()
+def asr(file_path: str):
+    """Transcribe audio file to text using OpenAI Whisper"""
+    import asyncio
+    import json
+
+    async def run():
+        text = await transcribe(file_path)
+        print(json.dumps({"ok": True, "text": text}, ensure_ascii=False))
 
     asyncio.run(run())
 

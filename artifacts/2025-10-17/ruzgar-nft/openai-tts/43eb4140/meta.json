@@ -1,0 +1,6 @@
+{
+  "adapter": "openai-tts",
+  "voice": "alloy",
+  "text": "RüzgârVerse başlıyor. Warm fractal resonance 01 üretildi.",
+  "model": "gpt-4o-mini-tts"
+}
