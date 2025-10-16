@@ -1,0 +1,86 @@
+Metadata-Version: 2.4
+Name: echo-os
+Version: 0.1.0
+Summary: Personal mini-OS: Echo Protocol — intent→plan→task with OpenAI integration
+Author: Onur
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+Requires-Dist: fastapi>=0.115
+Requires-Dist: uvicorn[standard]>=0.30
+Requires-Dist: pydantic>=2.7
+Requires-Dist: sqlmodel>=0.0.16
+Requires-Dist: aiosqlite>=0.19
+Requires-Dist: python-dotenv>=1.0
+Requires-Dist: httpx>=0.27
+Requires-Dist: openai>=1.47
+Requires-Dist: apscheduler>=3.10
+Requires-Dist: rich>=13.7
+Requires-Dist: typer>=0.9
+
+# ECHO.OS — Consciousness Engine
+
+Mini‑OS that turns **intent → plan → tasks**, logs ECHO moments, and executes with AI help.
+
+## Quickstart
+
+```bash
+# Setup
+python -m venv .venv && source .venv/bin/activate
+pip install -e .
+cp .env.example .env  # put your OPENAI_API_KEY
+
+# Boot the system
+python -m echo_os.cli boot
+
+# Plan a project
+python -m echo_os.cli plan --project "Ruzgar NFT" --context "Abstract warm fractal series 01-09; no human forms; metadata fields layer_id/resonance"
+
+# Consciousness engine commands
+python -m echo_os.cli observe "Working on fractal generation"
+python -m echo_os.cli intend "Create 9 unique fractal patterns"
+python -m echo_os.cli commit "Generate fractal 01" 90
+python -m echo_os.cli reflect
+```
+
+## API
+
+```bash
+# Start the API server
+uvicorn echo_os.routers.api:router --reload
+
+# Or create a FastAPI app wrapper
+from fastapi import FastAPI
+from echo_os.routers.api import router
+
+app = FastAPI()
+app.include_router(router)
+```
+
+## Architecture
+
+- **Consciousness Engine**: `observe → intend → commit → reflect` cycle
+- **Planner**: Converts intent to atomic tasks using OpenAI
+- **Executor**: Manages projects and task execution
+- **Store**: SQLite-based local storage with async sessions
+- **CLI**: Rich terminal interface for direct interaction
+- **API**: FastAPI-based REST endpoints
+
+## Notes
+
+- Local SQLite storage, async sessions
+- AI adapter is swappable; replace `openai_client.py` if needed
+- Consciousness Engine provides observe→intend→commit→reflect cycle
+- Privacy-first: all data stays local unless explicitly shared
+
+## Development
+
+```bash
+# Install in development mode
+pip install -e .
+
+# Run tests
+python -m pytest tests/
+
+# Type checking
+mypy src/
+```
