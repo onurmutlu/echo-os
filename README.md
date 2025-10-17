@@ -47,8 +47,11 @@ python -m echo_os.cli render-openai "warm fractal resonance 01 — abstract, no 
 # ComfyUI (GPU-accelerated)
 python -m echo_os.cli render "warm fractal resonance 02" --project "Ruzgar NFT" --adapter comfyui
 
-# Batch generation
+# Batch generation (text file)
 python -m echo_os.cli batch "Ruzgar NFT" prompts.txt --adapter openai-image
+
+# Professional story production (CSV storyboard)
+python -m echo_os.cli batch "Lighthouse Keeper Story" prompts/lighthouse_story.csv --adapter openai-image
 ```
 
 ### Audio Generation
@@ -124,22 +127,51 @@ app.include_router(router, prefix="/api")
 
 ## 📁 Artifact Structure
 
-Generated content is organized in a structured directory:
+Generated content is organized in a structured directory with **professional story production** support:
 
 ```
-artifacts/2025-10-17/ruzgar-nft/
-├── openai-image/
-│   └── 7e32d3e1/
-│       ├── image.png          # DALL-E 3 generated image
-│       └── meta.json          # {"adapter": "openai-image", "model": "dall-e-3", ...}
-├── openai-tts/
-│   └── 43eb4140/
-│       ├── voice.mp3          # TTS generated audio
-│       └── meta.json          # {"adapter": "openai-tts", "voice": "alloy", ...}
-└── comfyui/
-    └── a1b2c3d4/
-        ├── output.png         # ComfyUI generated image
-        └── meta.json          # {"adapter": "comfyui", "workflow": "inline", ...}
+artifacts/2025-10-17/
+├── ruzgar-nft/
+│   ├── openai-image/
+│   │   └── 7e32d3e1/
+│   │       ├── image.png          # DALL-E 3 generated image
+│   │       └── meta.json          # {"adapter": "openai-image", "model": "dall-e-3", ...}
+│   └── openai-tts/
+│       └── 43eb4140/
+│           ├── voice.mp3          # TTS generated audio
+│           └── meta.json          # {"adapter": "openai-tts", "voice": "alloy", ...}
+└── lighthouse-keeper-story/
+    └── openai-image/
+        ├── 001-morning_2025-10-17_03-23-35/    # Sequential story scenes
+        │   ├── image.png                       # Scene 1: Peaceful morning
+        │   └── meta.json                       # Rich metadata with character info
+        ├── 002-dark_2025-10-17_03-23-54/       # Scene 2: Storm approaching
+        │   ├── image.png
+        │   └── meta.json
+        ├── 003-dark_2025-10-17_03-24-12/       # Scene 3: Dramatic climax
+        │   ├── image.png
+        │   └── meta.json
+        └── 004-morning_2025-10-17_03-24-29/    # Scene 4: Aftermath
+            ├── image.png
+            └── meta.json
+```
+
+### Professional Story Metadata
+```json
+{
+  "story": "Lighthouse Keeper Story",
+  "scene_id": "scene_0617",
+  "narrative": "visual_story",
+  "character": {
+    "id": "keeper_v1",
+    "description": "elderly lighthouse keeper, 68, grey beard, navy peacoat"
+  },
+  "props": ["brass_telescope", "oil_lantern", "lighthouse"],
+  "location": "north_atlantic_coastal_town",
+  "camera": {"lens": "35mm_prime", "style": "documentary_realism"},
+  "lighting": "natural_atmospheric",
+  "prompt_hash": "488c79d1"
+}
 ```
 
 ---
@@ -200,6 +232,10 @@ pre-commit run --all-files
 * [x] **Render Adapters** - Dummy, ComfyUI, OpenAI Image
 * [x] **CLI Commands** - render-openai, tts, asr
 * [x] **API Endpoints** - /api/render for visual generation
+* [x] **Professional Story Production** - Story Bible + CSV storyboard system
+* [x] **Sequential Artifact Naming** - Hybrid format with scene ordering
+* [x] **Rich Metadata Schema** - Character, props, camera, lighting tracking
+* [x] **CSV Batch Processing** - Professional production workflow
 
 ### 🚀 v3 — Consciousness Expansion (Planned)
 * [ ] **Echo Memory System** - Embedding-based artifact search
@@ -290,4 +326,23 @@ echo "warm fractal resonance 03" >> prompts.txt
 echo-os batch "Ruzgar NFT" prompts.txt --adapter openai-image
 ```
 
-**ECHO.OS v2 — When consciousness meets GPU and voice.** 🎯✨
+### Professional Story Production
+```bash
+# Create Story Bible (STORY_BIBLE.md)
+# Define character, world, visual guidelines
+
+# Create CSV storyboard (prompts/lighthouse_story.csv)
+# project,prompt format with 4 sequential scenes
+
+# Generate complete story
+echo-os batch "Lighthouse Keeper Story" prompts/lighthouse_story.csv --adapter openai-image
+
+# Result: 4 perfectly sequenced scenes with rich metadata
+# artifacts/2025-10-17/lighthouse-keeper-story/openai-image/
+# ├── 001-morning_2025-10-17_03-23-35/  # Scene 1
+# ├── 002-dark_2025-10-17_03-23-54/     # Scene 2  
+# ├── 003-dark_2025-10-17_03-24-12/     # Scene 3
+# └── 004-morning_2025-10-17_03-24-29/  # Scene 4
+```
+
+**ECHO.OS v2 — When consciousness meets professional visual storytelling.** 🎬✨
