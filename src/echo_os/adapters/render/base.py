@@ -12,7 +12,7 @@ class RenderResult:
     meta: Mapping
 
 
-class RenderAdapter:
+class BaseRenderAdapter:
     name = "base"
 
     async def render(self, project: str, prompt: str, **kwargs) -> RenderResult:

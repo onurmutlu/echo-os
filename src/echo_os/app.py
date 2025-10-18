@@ -3,6 +3,9 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .store import init_db
 from .routers.api import router as api_router
+from .routers.pipeline import router as pipeline_router
+from .routers.captions import router as captions_router
+from .routers.video import router as video_router
 
 
 def create_app() -> FastAPI:
@@ -24,6 +27,9 @@ def create_app() -> FastAPI:
         return {"ok": True}
 
     app.include_router(api_router, prefix="/api")
+    app.include_router(pipeline_router, prefix="/api/pipeline")
+    app.include_router(captions_router, prefix="/api/captions")
+    app.include_router(video_router, prefix="/api/video")
     return app
 
 

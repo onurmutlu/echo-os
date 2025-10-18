@@ -3,8 +3,8 @@
 from __future__ import annotations
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
-from ..adapters.render.dummy import DummyRender
-from ..adapters.render.comfyui import ComfyUIRender
+from ..adapters.render.dummy import DummyRenderAdapter
+from ..adapters.render.comfyui import ComfyUIRenderAdapter
 
 router = APIRouter()
 
@@ -18,9 +18,9 @@ class RenderIn(BaseModel):
 @router.post("/render")
 async def render_endpoint(data: RenderIn):
     if data.adapter == "dummy":
-        adapter = DummyRender()
+        adapter = DummyRenderAdapter()
     elif data.adapter == "comfyui":
-        adapter = ComfyUIRender()
+        adapter = ComfyUIRenderAdapter()
     else:
         raise HTTPException(400, "unknown adapter")
 

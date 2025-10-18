@@ -3,7 +3,7 @@
 from __future__ import annotations
 import json
 import httpx
-from .base import RenderAdapter, RenderResult
+from .base import BaseRenderAdapter, RenderResult
 from ...config import settings
 from ...artifacts.storage import artifact_path, write_meta
 
@@ -56,7 +56,7 @@ WORKFLOW = {
 }
 
 
-class ComfyUIRender(RenderAdapter):
+class ComfyUIRenderAdapter(BaseRenderAdapter):
     name = "comfyui"
 
     async def render(self, project: str, prompt: str, **kwargs) -> RenderResult:

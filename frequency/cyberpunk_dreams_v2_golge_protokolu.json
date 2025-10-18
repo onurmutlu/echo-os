@@ -1,0 +1,17 @@
+{
+  "id": "cyberpunk_dreams_v2_golge_protokolu",
+  "title": "Cyberpunk Dreams v2 — Gölge Protokolü",
+  "base_color": "neon teal and warm orange",
+  "emotional_palette": ["mystery", "awakening", "transcendence", "digital spirituality"],
+  "narrative_motif": "data as prayer, code as faith, digital awakening",
+  "camera_bias": "35mm, cinematic, volumetric lighting, shallow DoF",
+  "negatives": ["no text", "no logos", "no watermark", "no extra people"],
+  "weights": {
+    "warmth": 0.5,
+    "surreal": 0.7,
+    "documentary": 0.6,
+    "spiritual": 0.8,
+    "cyberpunk": 0.9
+  }
+}
+

@@ -1,0 +1,21 @@
+{
+  "id": "seferverse_s01e01_cyberpunk_neon_v1",
+  "title": "SeferVerse S01E01 - Cyberpunk Neon",
+  "base_color": "neon lights, high contrast, cyberpunk cityscape at dusk",
+  "emotional_palette": ["introduction", "mystery", "focus", "technology", "threat", "power", "tension", "confrontation", "escape", "freedom", "chase", "pursuit", "climax", "drama", "victory", "resolution", "reflection", "peace"],
+  "narrative_motif": "Ayla vs Rex cyberpunk showdown, hacker vs corporate enforcer, neon-lit futuristic cityscape",
+  "camera_bias": "35mm lens, high contrast, shallow depth of field, neon lighting, backlighting, soft shadows",
+  "negatives": ["no text", "no logos", "no watermark", "no extra people"],
+  "weights": {
+    "warmth": 0.4,
+    "surreal": 0.6,
+    "documentary": 0.8
+  },
+  "created_at": "2025-10-17T12:23:44.390092Z",
+  "created_by": "onur",
+  "universe": "SeferVerse",
+  "season": "1",
+  "episode": "1",
+  "style_notes": "Futuristic cityscape at dusk, cyberpunk aesthetic, Ayla (hacker with neon hair) vs Rex (corporate enforcer in sleek suit), holo-computer, neon weapons, cybernetic enhancements, consistent character outfits, same city skyline background, neon lighting throughout"
+}
+

@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "echo-os"
-version = "0.1.0"
-description = "Personal mini-OS: Echo Protocol — intent→plan→task with OpenAI integration"
+version = "4.0.0"
+description = "Resonant Story Network: A living consciousness ecosystem for story production"
 authors = [{ name = "Onur" }]
 readme = "README.md"
 requires-python = ">=3.10"

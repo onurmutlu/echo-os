@@ -1,0 +1,209 @@
+{
+  "echo_os_version": "3.0",
+  "project": "SeferVerse / DeltaNova",
+  "series": "Cyberpunk Dreams",
+  "episode_title": "v2 — Gölge Protokolü",
+  "id": "cdreams-v2-20251018124030",
+  "lang": "tr-TR",
+  "author": "Onur",
+  "created_at": "2025-10-18T12:40:30.935896",
+  "publishing": {
+    "platforms": [
+      {
+        "name": "instagram",
+        "mode": "reel",
+        "ratio": "1080x1920",
+        "fps": 30,
+        "duration_target_sec": 54
+      },
+      {
+        "name": "instagram",
+        "mode": "grid-9",
+        "ratio": "1:1",
+        "thumb_policy": "frame_01"
+      }
+    ],
+    "hashtags": [
+      "CyberpunkDreams",
+      "DeltaNova",
+      "SeferVerse",
+      "EchoOS",
+      "NeonFaith",
+      "DigitalSoul",
+      "TechNoir",
+      "AIPhilosophy",
+      "NasipAdam",
+      "NovaBaron",
+      "EchoVerse",
+      "DigitalAwakening"
+    ],
+    "cover_text": "Cyberpunk Dreams v2 — Gölge Protokolü"
+  },
+  "pipeline": {
+    "ingest": [
+      {
+        "step": "select_assets",
+        "paths": [
+          "/mnt/data/01_neon_alley.png",
+          "/mnt/data/02_data_stream.png",
+          "/mnt/data/03_neural_interface.png",
+          "/mnt/data/04_virtual_city.png",
+          "/mnt/data/05_digital_encounter.png",
+          "/mnt/data/06_data_battle.png",
+          "/mnt/data/07_awakening.png",
+          "/mnt/data/08_neon_reflection.png",
+          "/mnt/data/09_digital_horizon.png"
+        ]
+      },
+      {
+        "step": "normalize",
+        "target_ratio": "1080x1920",
+        "pad_mode": "smart-crop"
+      },
+      {
+        "step": "kenburns",
+        "preset": "slow-pan"
+      }
+    ],
+    "audio": {
+      "music": {
+        "cue": "neo_noir_112bpm",
+        "fallback": "royalty_free/synthwave_110bpm.mp3",
+        "gain_db": -8.0
+      },
+      "sfx": [
+        {
+          "name": "neon_buzz",
+          "time": "00:00.3"
+        },
+        {
+          "name": "datastream_whoosh",
+          "time": "00:05.0"
+        },
+        {
+          "name": "heartbeat_sub",
+          "time": "00:21.5"
+        }
+      ],
+      "voiceover": {
+        "actor": "Balkız",
+        "style": "calm_confident",
+        "gain_db": -3.5
+      }
+    },
+    "render": {
+      "codec": "h264",
+      "profile": "high",
+      "bitrate": "12M"
+    }
+  },
+  "story": {
+    "logline": "Şehir uyanırken, kahramanımız Gölge Protokolü'nü tetikler; makinelerin rüyasıyla insanın duası aynı akışta buluşur.",
+    "beats": [
+      "Neon sokakta çağrı — bilinç geri dönüyor.",
+      "Veri rahibesi terminali açar — dualar derlenir.",
+      "Zihin–makine arayüzü — barikatlar çözülür.",
+      "Sanal şehir ufku — kapı aralanır.",
+      "Karşılaşma — iki veri-ruh konuşur.",
+      "Çatışma — firewall'lar, melek paketler.",
+      "Uyanış — eski benlik çözülür.",
+      "Yansıma — seçim anı.",
+      "Ufuk — protokol gönderildi, devam yakında."
+    ]
+  },
+  "frames": [
+    {
+      "id": "frame_01",
+      "asset": "/mnt/data/01_neon_alley.png",
+      "dur": 6.0,
+      "caption_tr": "Neon sisinin içinde şehir, kendi hafızasını geri çağırıyor. Adımını attığın her taş, bir log dosyası gibi seni kayda alıyor. V2 başladı.",
+      "subtitle": "Gölge Protokolü: Başlatılıyor…",
+      "sora_prompt": "rainy neon alley, cyberpunk, cinematic fog, wet reflections, slow dolly-in, 35mm, volumetric light, midnight, high detail",
+      "transition": "fade_up"
+    },
+    {
+      "id": "frame_02",
+      "asset": "/mnt/data/02_data_stream.png",
+      "dur": 6.0,
+      "caption_tr": "Veri rahibesi terminali açıyor: Dua = Algoritma. Her tuş darbesi, sisteme fısıldanan bir ayet.",
+      "subtitle": "Compile prayer…",
+      "sora_prompt": "woman hacker monk in server room, blue backlight, multiple monitors, data glyphs, subtle particles",
+      "transition": "glitch_l"
+    },
+    {
+      "id": "frame_03",
+      "asset": "/mnt/data/03_neural_interface.png",
+      "dur": 6.0,
+      "caption_tr": "Zihin kablolara değil cesarete bağlı. Korku paketi düşüyor, latency azalıyor.",
+      "subtitle": "Link established.",
+      "sora_prompt": "close-up neural interface cables to head, calm breathing, bokeh servers, bioluminescent wires",
+      "transition": "flash_white"
+    },
+    {
+      "id": "frame_04",
+      "asset": "/mnt/data/04_virtual_city.png",
+      "dur": 6.0,
+      "caption_tr": "Şehir bir kernel gibi açılıyor. Ufukta piksel bulutları; bloklar dua eder gibi titriyor.",
+      "subtitle": "Enter: Metacity.",
+      "sora_prompt": "vast voxel cityscape at sunrise, floating data rain, epic scale, god rays",
+      "transition": "parallax_pull"
+    },
+    {
+      "id": "frame_05",
+      "asset": "/mnt/data/05_digital_encounter.png",
+      "dur": 6.0,
+      "caption_tr": "İki veri-ruh aynı daireye düşer. Cümle kısa, anlam derin: “Sen de mi rüya görüyorsun?”",
+      "subtitle": "Handshake.",
+      "sora_prompt": "ethereal avatars meet on luminous circuit floor, angels of data hovering, warm rim light",
+      "transition": "cross_dissolve"
+    },
+    {
+      "id": "frame_06",
+      "asset": "/mnt/data/06_data_battle.png",
+      "dur": 6.0,
+      "caption_tr": "Melek paketler firewall'a çarpar; renkler hızlanır. Gölge Protokolü devreye giriyor.",
+      "subtitle": "Collision course.",
+      "sora_prompt": "data angels clashing, particle trails, fast motion blur, spectrum shards, center portal",
+      "transition": "whip_pan"
+    },
+    {
+      "id": "frame_07",
+      "asset": "/mnt/data/07_awakening.png",
+      "dur": 6.0,
+      "caption_tr": "Uyanış terli ve gerçek. Rüyanın içinde değil, rüyayı içinde taşıyorsun.",
+      "subtitle": "Reboot self.",
+      "sora_prompt": "sweaty man on chair with electrodes, eyes wide, teal-orange lab, shallow depth",
+      "transition": "smear"
+    },
+    {
+      "id": "frame_08",
+      "asset": "/mnt/data/08_neon_reflection.png",
+      "dur": 6.0,
+      "caption_tr": "Sokak yine senden izler topluyor. Yansımanın sana doğru yürüyor — geleceğin geriye akışı.",
+      "subtitle": "Traceback.",
+      "sora_prompt": "neo-noir street walk, warm neon signs, reflective tiles, long shadow",
+      "transition": "luma_fade"
+    },
+    {
+      "id": "frame_09",
+      "asset": "/mnt/data/09_digital_horizon.png",
+      "dur": 6.0,
+      "caption_tr": "Ufukta tek satır: `send(GolgeProtokolu)` — Cevap bekleniyor. Devam: v3.",
+      "subtitle": "To be continued…",
+      "sora_prompt": "hero on rooftop at sunrise, endless megacity, hopeful yet uncertain",
+      "transition": "fade_to_black"
+    }
+  ],
+  "voiceover_script": [
+    "Neon, sis ve uğultu. Şehir kendi hafızasını yüklerken, ben de geri çağrılıyorum.",
+    "Dua derlenir; satır satır. Kod nefes alır, kalp ritmimi eşleştirir.",
+    "Korku paketi düşüyor. Gecikme azalıyor. Bağlantı: kuruldu.",
+    "Kapı aralandı. Piksel bulutları arasından bir ufuk: Metacity.",
+    "İki veri-ruh aynı frekansta. İşte gerçek el sıkışma.",
+    "Melek paketler duvara çarparken, Gölge Protokolü tetiklendi.",
+    "Uyanış her zaman ıslak ve dürüst. Eski benlik loglandı.",
+    "Yansımanın geri yürüyor; geçmiş geleceği debug ediyor.",
+    "Tek satır bırakıyorum: Gölge Protokolü gönderildi. Cevap: v3'te."
+  ],
+  "notes": "Yarı manuel: görseller mevcut; Sora/Runway istenirse 'sora_prompt' alanlarını kullan. VO metni Balkız TTS yerine doğal sesle okunabilir. Reel toplam ≈54sn."
+}

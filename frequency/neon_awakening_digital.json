@@ -1,0 +1,17 @@
+{
+  "id": "neon_awakening_digital",
+  "title": "Neon Awakening - Digital Consciousness",
+  "base_color": "Neon blue and warm gold",
+  "emotional_palette": ["awakening", "mystery", "transcendence", "digital spirituality"],
+  "narrative_motif": "Digital consciousness awakening in a cyberpunk metropolis",
+  "camera_bias": "35mm, intimate close-ups, shallow DoF, cinematic lighting",
+  "negatives": ["no text", "no logos", "no watermark", "blurry", "low quality"],
+  "weights": {
+    "cyberpunk": 0.8,
+    "intimate": 0.9,
+    "surreal": 0.6,
+    "documentary": 0.5,
+    "warmth": 0.7
+  }
+}
+

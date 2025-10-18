@@ -2,11 +2,11 @@
 
 from __future__ import annotations
 import time
-from .base import RenderAdapter, RenderResult
+from .base import BaseRenderAdapter, RenderResult
 from ...artifacts.storage import artifact_path, write_meta
 
 
-class DummyRender(RenderAdapter):
+class DummyRenderAdapter(BaseRenderAdapter):
     name = "dummy"
 
     async def render(self, project: str, prompt: str, **kwargs) -> RenderResult:

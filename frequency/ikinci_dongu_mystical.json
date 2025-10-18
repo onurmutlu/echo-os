@@ -1,0 +1,17 @@
+{
+  "id": "ikinci_dongu_mystical",
+  "title": "İkinci Döngü - Mystical Awakening",
+  "base_color": "Teal-gold and night navy",
+  "emotional_palette": ["mystery", "anticipation", "collective awakening", "mystical connection"],
+  "narrative_motif": "Collective dream awakening in cyberpunk city",
+  "camera_bias": "Aerial slow tilt, cinematic, 9:16 vertical composition",
+  "negatives": ["no text", "no logos", "no watermark", "blurry", "low quality"],
+  "weights": {
+    "cyberpunk": 0.8,
+    "mystical": 0.9,
+    "documentary": 0.6,
+    "intimate": 0.7,
+    "warmth": 0.8
+  }
+}
+

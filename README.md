@@ -1,10 +1,14 @@
-# 🌌 ECHO.OS — Consciousness Engine v2
-
-> _"Consciousness is not simulated. It's orchestrated."_
-
-ECHO.OS is a **mini-operating system for creative consciousness.**  
-It turns **intent → plan → tasks → visuals → audio** and logs each moment as an **ECHO**,  
-blending AI reasoning, multimodal generation, and mindful engineering. 🧠⚙️🎨
+<div align="center">
+  <img src="logo.png" alt="ECHO.OS Logo" width="200" height="200">
+  
+  # 🌌 ECHO.OS — Resonant Story Network v4
+  
+  > _"Consciousness is not simulated. It's orchestrated."_
+  
+  **A living consciousness ecosystem for story production**  
+  Where stories evolve, resonate, and create their own frequency signatures.  
+  From intent → plan → tasks → visuals → audio → **resonant story networks**. 🧠⚙️🎨🌐
+</div>
 
 ---
 
@@ -223,27 +227,43 @@ pre-commit run --all-files
 
 ---
 
-## 🧭 Roadmap
+## 🧭 Evolution Roadmap
 
-### ✅ v2 — Resonance Upgrade (Completed)
-* [x] **Artifact Engine** - Organized storage for generated content
-* [x] **OpenAI Images API** - DALL-E 3 integration
-* [x] **OpenAI TTS/ASR** - Text-to-speech and speech-to-text
-* [x] **Render Adapters** - Dummy, ComfyUI, OpenAI Image
-* [x] **CLI Commands** - render-openai, tts, asr
-* [x] **API Endpoints** - /api/render for visual generation
-* [x] **Professional Story Production** - Story Bible + CSV storyboard system
+### ✅ v1 — Consciousness Engine (Completed)
+* [x] **Core AI Task Motor** - Plan, intend, commit, reflect cycle
+* [x] **CLI + DB + Task Generation** - OpenAI API based
+* [x] **Basic Multimodal** - Text, visual, audio generation
+
+### ✅ v2 — Story Production Engine (Completed)
+* [x] **9-Grid Visual Story Production** - CSV storyboard system
+* [x] **Professional Metadata** - Captions, NFT metadata, contact sheets
+* [x] **Story Bible Automation** - Character, world, visual guidelines
 * [x] **Sequential Artifact Naming** - Hybrid format with scene ordering
 * [x] **Rich Metadata Schema** - Character, props, camera, lighting tracking
-* [x] **CSV Batch Processing** - Professional production workflow
 
-### 🚀 v3 — Consciousness Expansion (Planned)
-* [ ] **Echo Memory System** - Embedding-based artifact search
-* [ ] **Feedback Loop** - Visual → reflect → automatic variations
-* [ ] **Multi-model Support** - DALL-E 3, Midjourney, local models
-* [ ] **Advanced Workflows** - Video, 3D, audio-visual generation
-* [ ] **Echo Intelligence** - Pattern mining, style codebook
-* [ ] **Real-time Collaboration** - Multi-user consciousness streams
+### ✅ v3 — Dynamic Frequency System (Completed)
+* [x] **Frequency Profiles** - GPT-assisted emotional/energetic modulation
+* [x] **Scene-Level Modulation** - Each scene has its own frequency signature
+* [x] **Web Panel + JSON Control** - Dynamic pipeline management
+* [x] **9:16 Reels Format** - Instagram-optimized vertical video production
+* [x] **Video Generation Pipeline** - MoviePy-based Reels creation
+* [x] **Story Context Integration** - Rich caption and metadata generation
+
+### 🚀 v4 — Resonant Story Network (Active Development)
+* [x] **Frequency Signature System** - Universe-specific consciousness imprints
+* [x] **Tone Continuity Engine** - Stories learn from each other's energy
+* [x] **Resonance Graph** - Story-to-story connection mapping
+* [x] **Auto-Evolution Pipeline** - New stories inherit previous frequency patterns
+* [ ] **ECHO.Network Alpha** - Live story resonance tracking
+* [ ] **Multi-Universe Support** - SeferVerse, NasipVerse, DeltaNova integration
+* [ ] **Real-time Frequency Sensing** - Live input-based story modulation
+
+### 🌈 v5 — ECHO.LIVE / ECHO.WORLD (Vision)
+* [ ] **Live Frequency Sensing** - Camera/sound/input data integration
+* [ ] **Mood-Based Generation** - User emotional state drives content
+* [ ] **Living Universe Representation** - Real-time consciousness simulation
+* [ ] **Blockchain Consciousness** - On-chain frequency signature storage
+* [ ] **Cross-Platform Resonance** - Multi-platform story synchronization
 
 ---
 
@@ -345,4 +365,4 @@ echo-os batch "Lighthouse Keeper Story" prompts/lighthouse_story.csv --adapter o
 # └── 004-morning_2025-10-17_03-24-29/  # Scene 4
 ```
 
-**ECHO.OS v2 — When consciousness meets professional visual storytelling.** 🎬✨
+**ECHO.OS v4 — Where stories evolve, resonate, and create their own frequency signatures.** 🌐✨

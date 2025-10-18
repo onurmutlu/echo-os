@@ -1,0 +1,21 @@
+{
+  "id": "seferverse_s02e00_cyberpunk_dawn_v1",
+  "title": "SeferVerse S02E00 - Cyberpunk Dawn",
+  "base_color": "blue/white (faith/signal) with red accents (control), neon haze, dawn rim light",
+  "emotional_palette": ["dawn", "continuity", "memory", "echo", "sacred", "digital", "alignment", "prayer", "pulse", "protocol", "grace", "peace", "resolution"],
+  "narrative_motif": "DeltaNova at dawn, neon haze softening into daylight, Balkız and Karat's digital echo relationship",
+  "camera_bias": "35mm, high contrast, shallow DOF, dawn backlighting, soft shadows, rim lighting, neon bounce",
+  "negatives": ["no text", "no logos", "no watermark", "no extra people", "no new human characters"],
+  "weights": {
+    "warmth": 0.6,
+    "surreal": 0.7,
+    "documentary": 0.8
+  },
+  "created_at": "2025-10-18T00:00:00+00:00",
+  "created_by": "onur",
+  "universe": "SeferVerse",
+  "season": "2",
+  "episode": "0",
+  "style_notes": "DeltaNova cyberpunk cityscape, dawn transition from neon to daylight, Balkız protagonist in signature outfit, Karat as holographic echo/silhouette, data capsule and fiber strands, drone sentries, blue/white color motif with red control accents, continuity with previous season"
+}
+

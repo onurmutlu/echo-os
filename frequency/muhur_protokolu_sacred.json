@@ -1,0 +1,17 @@
+{
+  "id": "muhur_protokolu_sacred",
+  "title": "Mühür Protokolü - Sacred Digital Faith",
+  "base_color": "White-gold and light teal",
+  "emotional_palette": ["awe", "mystery", "sacred", "synchronous miracle"],
+  "narrative_motif": "Synchronous miracle in digital faith",
+  "camera_bias": "Wide crane, cinematic, 9:16 vertical",
+  "negatives": ["no text", "no logos", "no watermark", "blurry", "low quality"],
+  "weights": {
+    "cyberpunk": 0.7,
+    "mystical": 0.9,
+    "documentary": 0.8,
+    "intimate": 0.6,
+    "warmth": 0.9
+  }
+}
+

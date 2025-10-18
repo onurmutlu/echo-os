@@ -3,20 +3,21 @@
 from __future__ import annotations
 import asyncio
 from typing import Dict, Any
-from .base import RenderAdapter, RenderRequest, RenderResult
+from .base import BaseRenderAdapter, RenderResult
 from datetime import datetime
 
 
-class DALLEAdapter(RenderAdapter):
+class DALLERenderAdapter(BaseRenderAdapter):
     """DALL-E 3 API adapter"""
 
-    def __init__(self, config: Dict[str, Any]):
-        super().__init__(config)
+    def __init__(self, config: Dict[str, Any] = None):
+        super().__init__()
+        config = config or {}
         self.model = config.get("model", "dall-e-3")
         self.quality = config.get("quality", "standard")
         self.size = config.get("size", "1024x1024")
 
-    async def render(self, request: RenderRequest) -> RenderResult:
+    async def render(self, project: str, prompt: str, **kwargs) -> RenderResult:
         """Generate image using DALL-E"""
         start_time = datetime.utcnow()
 
@@ -36,7 +37,7 @@ class DALLEAdapter(RenderAdapter):
             metadata={
                 "adapter": self.name,
                 "model": self.model,
-                "prompt": request.prompt,
+                "prompt": prompt,
                 "quality": self.quality,
                 "size": self.size,
                 "api_version": "dall-e-3",

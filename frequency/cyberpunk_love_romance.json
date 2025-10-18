@@ -1,0 +1,17 @@
+{
+  "id": "cyberpunk_love_romance",
+  "title": "Cyberpunk Love - Digital Romance",
+  "base_color": "Neon pink and electric blue",
+  "emotional_palette": ["romance", "anticipation", "intimacy", "digital connection"],
+  "narrative_motif": "Digital love in a cyberpunk world",
+  "camera_bias": "35mm, intimate close-ups, shallow DoF, romantic lighting",
+  "negatives": ["no text", "no logos", "no watermark", "blurry", "low quality"],
+  "weights": {
+    "cyberpunk": 0.8,
+    "romance": 0.9,
+    "intimate": 0.8,
+    "documentary": 0.3,
+    "warmth": 0.8
+  }
+}
+

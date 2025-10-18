@@ -1,0 +1,21 @@
+{
+  "id": "seferverse_s01e02_cyberpunk_romance_v1",
+  "title": "SeferVerse S01E02 - Cyberpunk Romance",
+  "base_color": "neon lights, romantic glow, cyberpunk cityscape, intimate lighting",
+  "emotional_palette": ["vulnerability", "surprise", "caution", "curiosity", "trust", "intimacy", "connection", "synchronization", "conflict", "tension", "longing", "melancholy", "dilemma", "internal_conflict", "realization", "determination", "love", "reunion", "hope"],
+  "narrative_motif": "Ayla and Rex's enemies-to-lovers cyberpunk romance, rooftop garden meetings, corporate vs hacker love story",
+  "camera_bias": "35mm lens, high contrast, shallow depth of field, romantic neon lighting, intimate close-ups, soft shadows",
+  "negatives": ["no text", "no logos", "no watermark", "no extra people"],
+  "weights": {
+    "warmth": 0.8,
+    "surreal": 0.6,
+    "documentary": 0.7
+  },
+  "created_at": "2025-10-18T13:35:00+00:00",
+  "created_by": "onur",
+  "universe": "SeferVerse",
+  "season": "1",
+  "episode": "2",
+  "style_notes": "Cyberpunk romance, enemies-to-lovers trope, Ayla (hacker) and Rex (corporate enforcer) falling in love, rooftop garden meetings, neon lights creating romantic atmosphere, intimate lighting, emotional vulnerability, corporate vs hacker conflict, heart-shaped neon lighting, romantic cyberpunk aesthetic"
+}
+

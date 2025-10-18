@@ -4,11 +4,11 @@ from __future__ import annotations
 import base64
 import time
 from openai import OpenAI
-from .base import RenderAdapter, RenderResult
+from .base import BaseRenderAdapter, RenderResult
 from ...artifacts.storage import artifact_path, write_meta
 
 
-class OpenAIImageRender(RenderAdapter):
+class OpenAIImageRenderAdapter(BaseRenderAdapter):
     name = "openai-image"
 
     async def render(self, project: str, prompt: str, **kwargs) -> RenderResult:
@@ -17,6 +17,18 @@ class OpenAIImageRender(RenderAdapter):
         size = kwargs.get("size", "1024x1024")
 
         # Call OpenAI Images API (using DALL-E 3 for now)
+        # Check if prompt contains 9:16 aspect ratio request
+        if (
+            "9:16" in prompt
+            or "vertical composition" in prompt
+            or "reels" in prompt.lower()
+        ):
+            size = "1024x1792"  # 9:16 aspect ratio for Reels
+        elif "1:1" in prompt or "square" in prompt or "grid" in prompt.lower():
+            size = "1024x1024"  # Square for grid
+        else:
+            size = size  # Use provided size
+
         response = client.images.generate(
             model="dall-e-3",
             prompt=prompt,
