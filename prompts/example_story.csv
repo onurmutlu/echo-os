@@ -1,0 +1,3 @@
+idx,scene_id,prompt,freq
+1,neon_alley,"Cyberpunk alley scene","{""weights"":{""warmth"":0.5,""surreal"":0.6},""emotional_palette"":[""yearning""]}"
+2,storm,"Ocean lighthouse under lightning","{}"

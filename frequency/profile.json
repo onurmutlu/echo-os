@@ -1,0 +1,10 @@
+{
+  "id": "warm_fractal_amber_v1",
+  "title": "Warm Fractal Amber",
+  "base_color": "warm fractal amber",
+  "emotional_palette": ["serenity", "anticipation", "controlled chaos"],
+  "narrative_motif": "progress through resonance",
+  "camera_bias": "35mm, shallow DoF, film grain",
+  "negatives": ["no text", "no logos", "no watermark"],
+  "weights": { "warmth": 0.8, "surreal": 0.3, "documentary": 0.7 }
+}
