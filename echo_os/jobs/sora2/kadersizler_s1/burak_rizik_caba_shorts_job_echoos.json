@@ -1,0 +1,240 @@
+{
+  "schema_version": "1.0.0",
+  "job_id": "burak_rizik_caba_shorts-sora2",
+  "model": "sora-2",
+  "render_mode": "multi_clip",
+  "output": {
+    "resolution": "1080x1920",
+    "fps": 24,
+    "format": "mp4",
+    "max_duration_sec": 22
+  },
+  "clips": [
+    {
+      "shot_id": "burak_shot01_opening",
+      "order": 1,
+      "prompt": "Extreme close-up of man's face, half in shadow, half illuminated by dim cold light. Dark mentor aesthetic, Burak character. Split lighting technique, one side completely dark, other side barely visible. Cold grey and night navy color palette. Static shot, 1 second of silence. Breathing visible in cold air. Intense eyes staring directly at camera. Low-key lighting, high contrast, cinematic noir style. 35mm lens, shallow depth of field, f/1.4 aperture. 9:16 vertical format. Neo-mystic atmosphere, psychological tension. Color palette: soğuk gri, gece laciverti, minimal pas turuncu accent. Style: karanlık mentor, düşük ışık, yüksek kontrast. Negative: bright, cheerful, warm colors, oversaturated, multiple people, lowres",
+      "duration_seconds": 3,
+      "resolution": "1080x1920",
+      "fps": 24,
+      "seed": 15001,
+      "guidance": 8.5,
+      "camera_params": {
+        "movement": "static",
+        "angle": "eye_level",
+        "distance": "extreme_close_up",
+        "lens": "35mm",
+        "style": "locked_off"
+      },
+      "style_tags": ["split_lighting", "noir", "psychological"],
+      "negative_terms": "bright, cheerful, warm colors, oversaturated, multiple people",
+      "audio": {
+        "enabled": true,
+        "style": "low_frequency_hum_40_60hz",
+        "dialogue": "Bir gerçek var… hepiniz kaçıyorsunuz."
+      },
+      "metadata": {
+        "scene_id": "burak_rizik_caba_shorts",
+        "episode": "SHORTS",
+        "shot_title": "Açılış - Gölge Yüz",
+        "camera": "extreme close-up, static, split lighting, half face in shadow",
+        "look": "karanlık mentor, split lighting, soğuk gri dominant"
+      }
+    },
+    {
+      "shot_id": "burak_shot02_revelation",
+      "order": 2,
+      "prompt": "Same man, Burak, slight camera push-in. Face still half in shadow, breathing slowly. Eyes narrowing, cold stare intensifies. Dim light creates dramatic shadows on face. Dark mentor presence, philosophical tension. Minimal movement, only breathing and slight head tilt. Cold grey atmosphere, night navy shadows. High contrast noir lighting. 35mm lens, f/1.4, shallow DOF. 9:16 vertical. Neo-mystic techno-thriller aesthetic. Color palette: soğuk gri, gece laciverti, minimal zümrüt yeşili reflection in eyes. Style: karanlık felsefe, minimal hareket, maksimum tensiyon. Negative: bright, cheerful, warm colors, oversaturated, multiple people, lowres",
+      "duration_seconds": 5,
+      "resolution": "1080x1920",
+      "fps": 24,
+      "seed": 15002,
+      "guidance": 8.5,
+      "camera_params": {
+        "movement": "slow_push_in",
+        "angle": "eye_level",
+        "distance": "extreme_close_up",
+        "lens": "35mm",
+        "style": "locked_off"
+      },
+      "style_tags": ["split_lighting", "noir", "philosophical"],
+      "negative_terms": "bright, cheerful, warm colors, oversaturated, multiple people",
+      "audio": {
+        "enabled": true,
+        "style": "low_frequency_hum_40_60hz",
+        "dialogue": "Rızkınızı çabanıza bağlı kıldık. Bu… kimsenin seni kurtarmaya gelmeyeceği anlamına geliyor."
+      },
+      "metadata": {
+        "scene_id": "burak_rizik_caba_shorts",
+        "episode": "SHORTS",
+        "shot_title": "Vahiy - Gerçek",
+        "camera": "extreme close-up, slow push-in, eyes narrowing",
+        "look": "karanlık vahiy, gözlerde zümrüt yeşili yansıma"
+      }
+    },
+    {
+      "shot_id": "burak_shot03_isolation",
+      "order": 3,
+      "prompt": "Burak's face, shadow side becomes darker. Cold grey light fades slightly. Eyes pierce through darkness. Dark mentor delivering harsh truth. Minimal facial movement, only lips moving for speech. Breathing visible, cold atmosphere. Split lighting becomes more dramatic, 70% shadow 30% light. High contrast noir cinematography. 35mm lens, f/1.4, ultra shallow DOF. 9:16 vertical. Psychological thriller aesthetic. Color palette: gece laciverti dominant, soğuk gri minimal, pas turuncu tiny accent on cheekbone. Style: izolasyon mesajı, karanlık artar, tensiyon maksimum. Negative: bright, cheerful, warm colors, oversaturated, multiple people, lowres",
+      "duration_seconds": 6,
+      "resolution": "1080x1920",
+      "fps": 24,
+      "seed": 15003,
+      "guidance": 8.5,
+      "camera_params": {
+        "movement": "static",
+        "angle": "eye_level",
+        "distance": "extreme_close_up",
+        "lens": "35mm",
+        "style": "locked_off"
+      },
+      "style_tags": ["split_lighting", "noir", "isolation"],
+      "negative_terms": "bright, cheerful, warm colors, oversaturated, multiple people",
+      "audio": {
+        "enabled": true,
+        "style": "low_frequency_hum_40_60hz",
+        "dialogue": "Ne ailenden… Ne dostundan… Ne devletten."
+      },
+      "metadata": {
+        "scene_id": "burak_rizik_caba_shorts",
+        "episode": "SHORTS",
+        "shot_title": "İzolasyon - Kimse Yok",
+        "camera": "extreme close-up, static, shadow side darkens",
+        "look": "gece laciverti dominant, izolasyon hissi"
+      }
+    },
+    {
+      "shot_id": "burak_shot04_warning",
+      "order": 4,
+      "prompt": "Burak leans slightly closer to camera, face moves from shadow into dim light. Whisper-close distance, intimate but threatening. Eyes locked on camera, predatory calm. Dark mentor delivering final warning. Cold breath visible in air. Minimal light reveals facial details, scars or tension lines. High contrast noir lighting, dramatic reveal. 35mm lens, f/1.4, razor-thin DOF. 9:16 vertical. Claustrophobic framing. Color palette: soğuk gri, gece laciverti, minimal zümrüt yeşili eye reflection. Style: fısıltı mesafesi, tehdit ve uyarı, maksimum yakınlık. Negative: bright, cheerful, warm colors, oversaturated, multiple people, lowres",
+      "duration_seconds": 5,
+      "resolution": "1080x1920",
+      "fps": 24,
+      "seed": 15004,
+      "guidance": 8.5,
+      "camera_params": {
+        "movement": "slight_push_in",
+        "angle": "eye_level",
+        "distance": "extreme_close_up",
+        "lens": "35mm",
+        "style": "locked_off"
+      },
+      "style_tags": ["split_lighting", "noir", "threatening"],
+      "negative_terms": "bright, cheerful, warm colors, oversaturated, multiple people",
+      "audio": {
+        "enabled": true,
+        "style": "low_frequency_hum_40_60hz",
+        "dialogue": "Bugün hareket etmezsen… yarın aynı hayat devam eder. Ve o yarın… seni boğmaya devam eder."
+      },
+      "metadata": {
+        "scene_id": "burak_rizik_caba_shorts",
+        "episode": "SHORTS",
+        "shot_title": "Uyarı - Boğulma",
+        "camera": "extreme close-up, slight push-in, whisper distance",
+        "look": "fısıltı mesafesi, tehdit hissi, soğuk nefes"
+      }
+    },
+    {
+      "shot_id": "burak_shot05_final_truth",
+      "order": 5,
+      "prompt": "Burak's face, final stare. Cold, aggressive charisma. Eyes slightly squinting, silent but powerful. Shadow side completely dark now. Light side reveals intense expression. Dark mentor's final message. Breathing slows, tension peaks. Split lighting at maximum contrast. High-key noir cinematography. 35mm lens, f/1.4, ultra shallow DOF. 9:16 vertical. Psychological dominance. Color palette: gece laciverti 80%, soğuk gri 15%, pas turuncu 5% rim light. Style: son bakış, sessiz saldırganlık, karizma maksimum. Negative: bright, cheerful, warm colors, oversaturated, multiple people, lowres",
+      "duration_seconds": 3,
+      "resolution": "1080x1920",
+      "fps": 24,
+      "seed": 15005,
+      "guidance": 8.5,
+      "camera_params": {
+        "movement": "static",
+        "angle": "eye_level",
+        "distance": "extreme_close_up",
+        "lens": "35mm",
+        "style": "locked_off"
+      },
+      "style_tags": ["split_lighting", "noir", "dominance"],
+      "negative_terms": "bright, cheerful, warm colors, oversaturated, multiple people",
+      "audio": {
+        "enabled": true,
+        "style": "low_frequency_hum_40_60hz",
+        "dialogue": "Rızık… seni bulmaz. Sen çabanla onu mecbur bırakırsın. Uyan."
+      },
+      "metadata": {
+        "scene_id": "burak_rizik_caba_shorts",
+        "episode": "SHORTS",
+        "shot_title": "Final Gerçek - Uyan",
+        "camera": "extreme close-up, static, final stare",
+        "look": "son bakış, maksimum kontrast, pas turuncu rim light"
+      }
+    }
+  ],
+  "metadata": {
+    "scene_id": "burak_rizik_caba_shorts",
+    "episode": "SHORTS",
+    "title": "Rızık = Çaba (Burak / Karanlık Mentor)",
+    "universe": "KADERSİZLER",
+    "character": "Burak",
+    "content_type": "youtube_shorts",
+    "total_clips": 5,
+    "total_duration_sec": 22,
+    "aspect_ratio": "9:16",
+    "fps": 24,
+    "production_ready": true,
+    "post_production": {
+      "overlay_effects": [
+        {
+          "type": "static_glitch",
+          "timing": "0:00-0:02",
+          "intensity": 0.3
+        },
+        {
+          "type": "text_overlay",
+          "text": "RIZIK = ÇABA",
+          "color": "#FF0000",
+          "style": "minimal",
+          "timing": "0:08-0:12",
+          "position": "bottom_third"
+        },
+        {
+          "type": "black_screen",
+          "text": "Uyan.",
+          "timing": "0:21-0:22",
+          "style": "fade_in"
+        }
+      ],
+      "audio_mix": {
+        "background_hum": "40-60Hz low frequency (Buhara Frequency vibe)",
+        "reverb": "subtle on final word 'Uyan'",
+        "dialogue_processing": "close-mic whisper effect, slight compression"
+      },
+      "color_grading": {
+        "lut": "noir_cold_grey",
+        "contrast": 1.8,
+        "saturation": 0.4,
+        "shadows": "crushed blacks",
+        "highlights": "minimal, only on face"
+      }
+    },
+    "distribution": {
+      "platforms": ["youtube_shorts", "instagram_reels", "tiktok"],
+      "hashtags": [
+        "#Kadersizler",
+        "#RızıkÇaba",
+        "#KaranlıkMentor",
+        "#Felsefe",
+        "#Motivasyon",
+        "#GerçeklerSöylenir",
+        "#Uyan"
+      ],
+      "caption": "Rızık seni bulmaz. Sen çabanla onu mecbur bırakırsın. 🖤 #Kadersizler #RızıkÇaba"
+    },
+    "frequency_signature": {
+      "emotion_primary": "tension",
+      "emotion_secondary": "determination",
+      "motif_primary": "isolation",
+      "motif_secondary": "harsh_truth",
+      "color_dominant": "night_navy",
+      "pace": "slow_deliberate",
+      "tension_level": 0.85
+    }
+  }
+}
+
