@@ -49,6 +49,7 @@ Thumbs.db
 
 # Logs
 *.log
+nohup.out
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
@@ -148,3 +149,43 @@ temp/
 artifacts/
 ComfyUI/
 *.db
+
+# Generated outputs / renders (big binaries)
+output/
+renders/
+logs/
+
+# Media binaries (avoid committing heavy assets by accident)
+*.mp4
+*.mov
+*.mkv
+*.webm
+*.avi
+*.mp3
+*.wav
+*.flac
+*.m4a
+*.aac
+*.ogg
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.webp
+*.srt
+*.vtt
+*.zip
+*.tar
+*.gz
+
+# Keep repo logos if needed
+!logo.png
+!echo-logo.png
+
+# Temp / local files
+*.bak
+.env.bak
+.tmp-openapi.json
+
+# Cloudflared (credentials repoya girmemeli)
+cloudflared/credentials.json
