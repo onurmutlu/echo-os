@@ -134,6 +134,87 @@ def make_text_panel(
     return output_path
 
 
+def _normalize_characters(value: Any) -> list[str]:
+    """Normalize characters field to a list of display names."""
+    if not value:
+        return []
+    if isinstance(value, str):
+        return [value.strip()] if value.strip() else []
+    if isinstance(value, list):
+        out: list[str] = []
+        for item in value:
+            if isinstance(item, str):
+                if item.strip():
+                    out.append(item.strip())
+            elif isinstance(item, dict):
+                name = (
+                    item.get("name")
+                    or item.get("id")
+                    or item.get("title")
+                    or item.get("label")
+                )
+                if isinstance(name, str) and name.strip():
+                    out.append(name.strip())
+        return out
+    if isinstance(value, dict):
+        # Common shapes: {"characters": [...]} or {"name": "..."}
+        if "characters" in value:
+            return _normalize_characters(value.get("characters"))
+        name = (
+            value.get("name")
+            or value.get("id")
+            or value.get("title")
+            or value.get("label")
+        )
+        if isinstance(name, str) and name.strip():
+            return [name.strip()]
+    return []
+
+
+def _derive_universe_label(meta: Dict[str, Any]) -> str:
+    """Best-effort universe label from meta fields."""
+    for k in ("universe", "universe_id", "series", "project"):
+        v = meta.get(k)
+        if isinstance(v, str) and v.strip():
+            return v.strip()
+
+    slug = meta.get("slug")
+    if isinstance(slug, str):
+        s = slug.lower()
+        if "nasip" in s:
+            return "NasipVerse"
+        if "sefer" in s:
+            return "SeferVerse"
+        if "delta" in s:
+            return "DeltaNova"
+
+    world = meta.get("world")
+    if isinstance(world, str) and world.strip():
+        # Keep it short for overlay readability
+        return world.strip()[:28]
+
+    return "ECHO.Story"
+
+
+def _make_badge_panel(
+    text: str,
+    font_path: Optional[str],
+    max_width: int,
+    size: int = 34,
+    opacity: int = 160,
+) -> Optional[str]:
+    if not text or not text.strip():
+        return None
+    font = load_font(font_path, size)
+    return make_text_panel(
+        text=text.strip(),
+        max_width=max_width,
+        font=font,
+        padding=(20, 12),
+        opacity=opacity,
+    )
+
+
 def smart_fit_with_blur(
     img_path: str,
     dur: float,
@@ -210,6 +291,48 @@ def make_clip_for_frame(
                 _with_duration(ImageClip(sub_path), dur), ("center", 80)
             )
             layers.append(sub_clip)
+
+    # Universe + character consistency overlays (top corners)
+    universe = frame.get("universe")
+    if isinstance(universe, str) and universe.strip():
+        uni_path = _make_badge_panel(
+            text=universe,
+            font_path=font_path,
+            max_width=int(W * 0.55),
+            size=32,
+            opacity=165,
+        )
+        if uni_path:
+            uni_clip = _with_position(
+                _with_duration(ImageClip(uni_path), dur),
+                (40, 40),
+            )
+            layers.append(uni_clip)
+
+    chars = frame.get("characters")
+    char_list = _normalize_characters(chars)
+    if char_list:
+        char_text = " · ".join(char_list[:3])
+        char_path = _make_badge_panel(
+            text=char_text,
+            font_path=font_path,
+            max_width=int(W * 0.55),
+            size=30,
+            opacity=150,
+        )
+        if char_path:
+            char_clip = _with_position(
+                _with_duration(ImageClip(char_path), dur),
+                (W - 40, 40),
+            )
+            # right-align: MoviePy can accept ("right", y), but we keep numeric
+            # by shifting with clip's width when available.
+            try:
+                w = char_clip.size[0]
+                char_clip = _with_position(char_clip, (W - w - 40, 40))
+            except Exception:
+                pass
+            layers.append(char_clip)
 
     # Create caption text panel
     if caption:
@@ -315,6 +438,8 @@ def convert_echo_os_meta_to_spec(
 ) -> Dict[str, Any]:
     """Convert ECHO.OS meta.json to render_reel.py compatible spec"""
     scenes = meta.get("scenes", [])
+    universe_label = _derive_universe_label(meta)
+    characters = _normalize_characters(meta.get("characters"))
 
     # Convert scenes to frames format
     frames = []
@@ -358,6 +483,8 @@ def convert_echo_os_meta_to_spec(
             "dur": 6.0,  # Default duration
             "subtitle": scene_name,
             "caption_tr": scene_description,
+            "universe": universe_label,
+            "characters": characters,
         }
         frames.append(frame)
 
@@ -367,6 +494,10 @@ def convert_echo_os_meta_to_spec(
         "project": meta.get("project", "ECHO.Story"),
         "series": meta.get("story", "Untitled Story"),
         "episode_title": meta.get("story", "Untitled Story"),
+        "universe": universe_label,
+        "characters": characters,
+        "world": meta.get("world"),
+        "style": meta.get("style"),
         "frames": frames,
     }
 

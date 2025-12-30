@@ -131,6 +131,8 @@ async def generate_video(request: VideoRequest, background_tasks: BackgroundTask
             "resolution": result["resolution"],
             "fps": result["fps"],
             "bitrate": result["bitrate"],
+            "universe": spec.get("universe"),
+            "characters": spec.get("characters"),
             "public_url": f"http://127.0.0.1:8081/artifacts/{story_dir.parent.name}/{story_dir.name}/{output_filename}",
         }
 
