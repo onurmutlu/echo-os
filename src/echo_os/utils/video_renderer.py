@@ -223,20 +223,32 @@ def validate_story_consistency(spec: Dict[str, Any]) -> Dict[str, Any]:
     frames = spec.get("frames") or []
     spec_universe = spec.get("universe")
     spec_chars = _normalize_characters(spec.get("characters"))
+    spec_char_set = set(spec_chars)
 
     frame_universes = set()
     frame_char_sets = set()
+    universe_drift = []
+    unknown_characters = {}
     for f in frames:
         if isinstance(f, dict):
             u = f.get("universe")
             if isinstance(u, str) and u.strip():
-                frame_universes.add(u.strip())
+                u = u.strip()
+                frame_universes.add(u)
+                if spec_universe and u != spec_universe:
+                    universe_drift.append({"frame_id": f.get("id"), "universe": u})
             c = tuple(_normalize_characters(f.get("characters")))
             if c:
                 frame_char_sets.add(c)
+                if spec_char_set:
+                    unknown = [x for x in c if x not in spec_char_set]
+                    if unknown:
+                        unknown_characters[f.get("id") or "unknown"] = unknown
 
-    ok_universe = bool(spec_universe) and (len(frame_universes) <= 1)
-    ok_characters = bool(spec_chars) and (len(frame_char_sets) <= 1)
+    ok_universe = (
+        bool(spec_universe) and (len(frame_universes) <= 1) and (not universe_drift)
+    )
+    ok_characters = bool(spec_chars) and (not unknown_characters)
 
     return {
         "ok": bool(ok_universe and ok_characters),
@@ -244,6 +256,8 @@ def validate_story_consistency(spec: Dict[str, Any]) -> Dict[str, Any]:
         "spec_characters": spec_chars,
         "frame_universes": sorted(frame_universes),
         "frame_character_sets": [list(x) for x in sorted(frame_char_sets)],
+        "universe_drift": universe_drift,
+        "unknown_characters": unknown_characters,
         "issues": [
             *([] if spec_universe else ["spec.universe boş"]),
             *([] if spec_chars else ["spec.characters boş"]),
@@ -254,8 +268,13 @@ def validate_story_consistency(spec: Dict[str, Any]) -> Dict[str, Any]:
             ),
             *(
                 []
-                if len(frame_char_sets) <= 1
-                else ["frame'ler arasında characters tutarsız"]
+                if not universe_drift
+                else ["frame universe değerleri spec ile uyuşmuyor"]
+            ),
+            *(
+                []
+                if not unknown_characters
+                else ["frame characters içinde spec dışı (bilinmeyen) karakter var"]
             ),
         ],
     }
@@ -537,10 +556,34 @@ def convert_echo_os_meta_to_spec(
             "dur": 6.0,  # Default duration
             "subtitle": scene_name,
             "caption_tr": scene_description,
-            "universe": universe_label,
-            "characters": characters,
+            "universe": (
+                scene.get("universe").strip()
+                if isinstance(scene.get("universe"), str)
+                and scene.get("universe").strip()
+                else universe_label
+            ),
+            "characters": (
+                _normalize_characters(
+                    scene.get("characters")
+                    or scene.get("character")
+                    or scene.get("cast")
+                    or scene.get("people")
+                )
+                or characters
+            ),
         }
         frames.append(frame)
+
+    # If story-level characters are missing, derive from frames (union)
+    if not characters:
+        union: list[str] = []
+        seen = set()
+        for f in frames:
+            for c in _normalize_characters(f.get("characters")):
+                if c not in seen:
+                    seen.add(c)
+                    union.append(c)
+        characters = union
 
     # Create spec in render_reel.py format
     spec = {

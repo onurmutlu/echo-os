@@ -19,6 +19,26 @@ from ..utils.bible_renderer import render_bible
 router = APIRouter()
 
 
+def _parse_csv_list(value: Optional[str]) -> list[str]:
+    """Parse CSV cell like 'A, B; C | D' into ['A','B','C','D']."""
+    if not value or not isinstance(value, str):
+        return []
+    raw = value.strip()
+    if not raw:
+        return []
+    for sep in ("|", ";", "/"):
+        raw = raw.replace(sep, ",")
+    parts = [p.strip() for p in raw.split(",")]
+    return [p for p in parts if p]
+
+
+def _first_nonempty(*values: Optional[str]) -> Optional[str]:
+    for v in values:
+        if isinstance(v, str) and v.strip():
+            return v.strip()
+    return None
+
+
 class PipelineIn(BaseModel):
     story: str
     csv_path: str
@@ -136,6 +156,20 @@ async def _ninegrid(
             print(f"Scene {i} rendered successfully: {target_file}")
 
             # Save scene data
+            scene_characters = _parse_csv_list(
+                _first_nonempty(
+                    scene.get("characters"),
+                    scene.get("character"),
+                    scene.get("cast"),
+                    scene.get("people"),
+                )
+            )
+            scene_universe = _first_nonempty(
+                scene.get("universe"),
+                scene.get("universe_id"),
+                scene.get("series"),
+                scene.get("world_id"),
+            )
             scene_data = {
                 "idx": i,
                 "scene_id": scene["scene_id"],
@@ -147,6 +181,9 @@ async def _ninegrid(
                     "weights": final_freq.get("weights", {}),
                     "palette": final_freq.get("emotional_palette", [])[:2],
                 },
+                # Optional scene-level consistency signals (if present in CSV)
+                "characters": scene_characters,
+                "universe": scene_universe,
             }
             saved.append(scene_data)
 
