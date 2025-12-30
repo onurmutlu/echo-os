@@ -21,6 +21,8 @@ class VideoRequest(BaseModel):
     duration_per_scene: float = 6.0
     crossfade_duration: float = 0.5
     bitrate: str = "10M"
+    enable_kenburns: bool = True
+    kenburns_zoom: float = 0.06
     include_music: bool = False
     music_file: Optional[str] = None
     include_voiceover: bool = False
@@ -115,6 +117,8 @@ async def generate_video(request: VideoRequest, background_tasks: BackgroundTask
             font_path=font_path,
             music_path=request.music_file if request.include_music else None,
             music_gain_db=-8.0,
+            enable_kenburns=request.enable_kenburns,
+            kenburns_zoom=request.kenburns_zoom,
         )
 
         return {

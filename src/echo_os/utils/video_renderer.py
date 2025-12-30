@@ -12,7 +12,7 @@ try:
         AudioFileClip,
         CompositeVideoClip,
         concatenate_videoclips,
-        # vfx,  # Available for future use
+        vfx,
     )
 except ImportError:
     from moviepy import (
@@ -20,10 +20,50 @@ except ImportError:
         AudioFileClip,
         CompositeVideoClip,
         concatenate_videoclips,
+        vfx,
     )
 
 # Reels dimensions
 W, H = 1080, 1920
+
+
+def _ease_in_out(t01: float) -> float:
+    """Smooth easing for motion (0..1 -> 0..1)."""
+    x = max(0.0, min(1.0, float(t01)))
+    # Smoothstep: 3x^2 - 2x^3
+    return x * x * (3.0 - 2.0 * x)
+
+
+def _with_duration(clip, dur: float):
+    return (
+        clip.with_duration(dur)
+        if hasattr(clip, "with_duration")
+        else clip.set_duration(dur)
+    )
+
+
+def _with_position(clip, pos):
+    return (
+        clip.with_position(pos)
+        if hasattr(clip, "with_position")
+        else clip.set_position(pos)
+    )
+
+
+def _resized(clip, scale_or_size):
+    return (
+        clip.resized(scale_or_size)
+        if hasattr(clip, "resized")
+        else clip.resize(scale_or_size)
+    )
+
+
+def _set_audio(video_clip, audio_clip):
+    return (
+        video_clip.set_audio(audio_clip)
+        if hasattr(video_clip, "set_audio")
+        else video_clip.with_audio(audio_clip)
+    )
 
 
 def load_font(font_path: Optional[str], size: int) -> ImageFont.ImageFont:
@@ -95,7 +135,10 @@ def make_text_panel(
 
 
 def smart_fit_with_blur(
-    img_path: str, dur: float, zoom_factor: float = 0.05
+    img_path: str,
+    dur: float,
+    enable_kenburns: bool = True,
+    zoom_factor: float = 0.06,
 ) -> CompositeVideoClip:
     """Create smart-fit image with blurred background and Ken Burns effect"""
     im = Image.open(img_path).convert("RGB")
@@ -105,18 +148,28 @@ def smart_fit_with_blur(
     bg = bg.filter(ImageFilter.GaussianBlur(radius=25))
     bg_path = os.path.join("/tmp", f"_bg_{uuid.uuid4().hex}.jpg")
     bg.save(bg_path, quality=85)
-    bg_clip = ImageClip(bg_path, duration=dur)
+    bg_clip = _with_duration(ImageClip(bg_path), dur)
 
     # Create foreground with smart scaling
-    fg = ImageClip(img_path, duration=dur)
+    fg = _with_duration(ImageClip(img_path), dur)
     iw, ih = fg.size
-    scale = min(W / iw, (H * 0.9) / ih)
-    fg = fg.resized(scale).with_position("center")
+    base_scale = min(W / iw, (H * 0.9) / ih)
 
-    comp = CompositeVideoClip([bg_clip, fg], size=(W, H)).with_duration(dur)
+    # Smooth Ken Burns zoom (real motion, makes the video feel less "static")
+    if enable_kenburns and zoom_factor and zoom_factor > 0:
+        dur_safe = max(float(dur), 0.01)
 
-    # Gentle Ken Burns zoom-in - simplified for now
-    # comp = comp.with_effects([vfx.resize(lambda t: 1.0 + zoom_factor * (t / max(dur, 0.01)))])
+        def _scale_at_time(t: float) -> float:
+            return base_scale * (1.0 + float(zoom_factor) * _ease_in_out(t / dur_safe))
+
+        # MoviePy 1.x expects resize() + fx(); MoviePy 2.x still supports fx().
+        fg = fg.fx(vfx.resize, _scale_at_time)
+    else:
+        fg = _resized(fg, base_scale)
+
+    fg = _with_position(fg, "center")
+
+    comp = _with_duration(CompositeVideoClip([bg_clip, fg], size=(W, H)), dur)
 
     return comp
 
@@ -135,7 +188,12 @@ def make_clip_for_frame(
     caption = frame.get("caption_tr", "")
 
     # Create base clip with smart fit and blur
-    base = smart_fit_with_blur(asset, dur)
+    base = smart_fit_with_blur(
+        asset,
+        dur,
+        enable_kenburns=bool(frame.get("enable_kenburns", True)),
+        zoom_factor=float(frame.get("kenburns_zoom", 0.06)),
+    )
     layers = [base]
 
     # Load fonts
@@ -148,7 +206,9 @@ def make_clip_for_frame(
             subtitle, max_width=int(W * 0.9), font=font_sub, opacity=110
         )
         if sub_path:
-            sub_clip = ImageClip(sub_path, duration=dur).with_position(("center", 80))
+            sub_clip = _with_position(
+                _with_duration(ImageClip(sub_path), dur), ("center", 80)
+            )
             layers.append(sub_clip)
 
     # Create caption text panel
@@ -159,12 +219,13 @@ def make_clip_for_frame(
         if cap_path:
             cap_img = Image.open(cap_path)
             cap_h = cap_img.size[1]
-            cap_clip = ImageClip(cap_path, duration=dur).with_position(
-                ("center", H - cap_h - 120)
+            cap_clip = _with_position(
+                _with_duration(ImageClip(cap_path), dur),
+                ("center", H - cap_h - 120),
             )
             layers.append(cap_clip)
 
-    comp = CompositeVideoClip(layers, size=(W, H)).with_duration(dur)
+    comp = _with_duration(CompositeVideoClip(layers, size=(W, H)), dur)
     return comp
 
 
@@ -177,6 +238,8 @@ def build_video(
     font_path: Optional[str] = None,
     music_path: Optional[str] = None,
     music_gain_db: float = -8.0,
+    enable_kenburns: bool = True,
+    kenburns_zoom: float = 0.06,
 ) -> Dict[str, Any]:
     """Build video from Echo-OS JSON spec"""
     frames = spec.get("frames", [])
@@ -186,30 +249,47 @@ def build_video(
     # Create clips for each frame
     clips = []
     for i, frame in enumerate(frames):
+        # Allow global motion defaults (frame can override)
+        frame = dict(frame)
+        frame.setdefault("enable_kenburns", enable_kenburns)
+        frame.setdefault("kenburns_zoom", kenburns_zoom)
         clip = make_clip_for_frame(frame, fps=fps, font_path=font_path)
         clips.append(clip)
 
-    # Apply crossfade transitions - simplified for now
+    # Real crossfade: overlap + fade-in on subsequent clips
     seq = []
+    xfade = max(0.0, float(xfade))
     for i, clip in enumerate(clips):
-        seq.append(clip)
+        if i > 0 and xfade > 0 and hasattr(clip, "crossfadein"):
+            seq.append(clip.crossfadein(xfade))
+        else:
+            seq.append(clip)
 
     # Concatenate with crossfade
-    final = concatenate_videoclips(seq, method="compose", padding=-xfade)
+    final = concatenate_videoclips(
+        seq, method="compose", padding=(-xfade if xfade > 0 else 0)
+    )
 
     # Add background music if provided
     if music_path and os.path.exists(music_path):
-        audio = AudioFileClip(music_path).volumex(10 ** (music_gain_db / 20.0))
-        final = final.set_audio(audio.set_duration(final.duration))
+        audio = AudioFileClip(music_path)
+        if hasattr(audio, "volumex"):
+            audio = audio.volumex(10 ** (music_gain_db / 20.0))
+        audio = _with_duration(audio, final.duration)
+        final = _set_audio(final, audio)
 
     # Write video file
+    threads = max(1, int(os.cpu_count() or 4))
     final.write_videofile(
         out_path,
         fps=fps,
         codec="libx264",
         audio=(music_path is not None),
         bitrate=bitrate,
-        threads=4,
+        audio_codec="aac",
+        preset="medium",
+        ffmpeg_params=["-pix_fmt", "yuv420p", "-movflags", "+faststart"],
+        threads=threads,
     )
 
     # Clean up temp files
