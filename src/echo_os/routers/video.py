@@ -7,7 +7,12 @@ import json
 import os
 from pathlib import Path
 
-from ..utils.video_renderer import build_video, convert_echo_os_meta_to_spec
+from ..utils.video_renderer import (
+    build_video,
+    convert_echo_os_meta_to_spec,
+    enforce_story_consistency,
+    validate_story_consistency,
+)
 
 router = APIRouter()
 
@@ -27,6 +32,7 @@ class VideoRequest(BaseModel):
     music_file: Optional[str] = None
     include_voiceover: bool = False
     voiceover_file: Optional[str] = None
+    strict_consistency: bool = False
 
 
 def load_story_meta(slug: str) -> Dict[str, Any]:
@@ -92,6 +98,12 @@ async def generate_video(request: VideoRequest, background_tasks: BackgroundTask
 
         # Convert ECHO.OS meta to render_reel.py spec format
         spec = convert_echo_os_meta_to_spec(meta, images_dir)
+        consistency = validate_story_consistency(spec)
+        if request.strict_consistency:
+            try:
+                enforce_story_consistency(spec)
+            except ValueError as e:
+                raise HTTPException(400, str(e))
 
         # Find font path
         font_path = None
@@ -133,6 +145,7 @@ async def generate_video(request: VideoRequest, background_tasks: BackgroundTask
             "bitrate": result["bitrate"],
             "universe": spec.get("universe"),
             "characters": spec.get("characters"),
+            "consistency": consistency,
             "public_url": f"http://127.0.0.1:8081/artifacts/{story_dir.parent.name}/{story_dir.name}/{output_filename}",
         }
 

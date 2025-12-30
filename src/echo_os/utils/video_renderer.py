@@ -215,6 +215,60 @@ def _make_badge_panel(
     )
 
 
+def validate_story_consistency(spec: Dict[str, Any]) -> Dict[str, Any]:
+    """Validate universe/character consistency across the spec.
+
+    Returns a report you can log/return from API. Does not raise by default.
+    """
+    frames = spec.get("frames") or []
+    spec_universe = spec.get("universe")
+    spec_chars = _normalize_characters(spec.get("characters"))
+
+    frame_universes = set()
+    frame_char_sets = set()
+    for f in frames:
+        if isinstance(f, dict):
+            u = f.get("universe")
+            if isinstance(u, str) and u.strip():
+                frame_universes.add(u.strip())
+            c = tuple(_normalize_characters(f.get("characters")))
+            if c:
+                frame_char_sets.add(c)
+
+    ok_universe = bool(spec_universe) and (len(frame_universes) <= 1)
+    ok_characters = bool(spec_chars) and (len(frame_char_sets) <= 1)
+
+    return {
+        "ok": bool(ok_universe and ok_characters),
+        "spec_universe": spec_universe,
+        "spec_characters": spec_chars,
+        "frame_universes": sorted(frame_universes),
+        "frame_character_sets": [list(x) for x in sorted(frame_char_sets)],
+        "issues": [
+            *([] if spec_universe else ["spec.universe boş"]),
+            *([] if spec_chars else ["spec.characters boş"]),
+            *(
+                []
+                if len(frame_universes) <= 1
+                else ["frame'ler arasında universe tutarsız"]
+            ),
+            *(
+                []
+                if len(frame_char_sets) <= 1
+                else ["frame'ler arasında characters tutarsız"]
+            ),
+        ],
+    }
+
+
+def enforce_story_consistency(spec: Dict[str, Any]) -> Dict[str, Any]:
+    """Strict version: raises ValueError if consistency is not met."""
+    report = validate_story_consistency(spec)
+    if not report["ok"]:
+        raise ValueError("Tutarlılık hatası: " + "; ".join(report.get("issues") or []))
+    return report
+
+
 def smart_fit_with_blur(
     img_path: str,
     dur: float,
