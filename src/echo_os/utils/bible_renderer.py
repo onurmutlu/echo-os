@@ -4,12 +4,109 @@ from __future__ import annotations
 from typing import Dict, Any, List
 
 
+def _parse_csv_list(value: Any) -> list[str]:
+    if not value or not isinstance(value, str):
+        return []
+    raw = value.strip()
+    if not raw:
+        return []
+    for sep in ("|", ";", "/"):
+        raw = raw.replace(sep, ",")
+    parts = [p.strip() for p in raw.split(",")]
+    return [p for p in parts if p]
+
+
+def _first_nonempty(*values: Any) -> str | None:
+    for v in values:
+        if isinstance(v, str) and v.strip():
+            return v.strip()
+    return None
+
+
+def _derive_universe(story: str, scenes: List[Dict[str, Any]]) -> str:
+    # Prefer explicit universe fields from CSV
+    for s in scenes:
+        u = _first_nonempty(
+            s.get("universe"),
+            s.get("universe_id"),
+            s.get("series"),
+            s.get("world_id"),
+        )
+        if u:
+            return u
+
+    s = (story or "").lower()
+    if "nasip" in s:
+        return "NasipVerse"
+    if "sefer" in s:
+        return "SeferVerse"
+    if "delta" in s:
+        return "DeltaNova"
+    return "ECHO.Story"
+
+
 async def render_bible(story: str, scenes: List[Dict[str, Any]]) -> Dict[str, Any]:
     """Generate Story Bible from story and scenes"""
+
+    universe = _derive_universe(story, scenes)
 
     # Extract characters from scenes
     characters = []
     props = []
+
+    # Prefer explicit characters/cast from CSV
+    explicit_names: list[str] = []
+    for scene in scenes:
+        explicit_names.extend(
+            _parse_csv_list(
+                _first_nonempty(
+                    scene.get("characters"),
+                    scene.get("character"),
+                    scene.get("cast"),
+                    scene.get("people"),
+                )
+                or ""
+            )
+        )
+    seen = set()
+    explicit_names = [n for n in explicit_names if not (n in seen or seen.add(n))]
+
+    # Lightweight canon descriptions (expandable)
+    canon: dict[str, dict[str, str]] = {
+        "Balkız": {
+            "role": "Network consciousness",
+            "description": "A sentient network presence; calm, precise, and strangely intimate in tone",
+        },
+        "Nasip Adam": {
+            "role": "Seal bearer",
+            "description": "A grounded, mythic figure; carries the 'seal' and speaks in short, certain sentences",
+        },
+        "Listener": {
+            "role": "Human witness",
+            "description": "A quiet observer who notices patterns others miss; presence anchors the surreal",
+        },
+        "Ayla": {
+            "role": "Protagonist",
+            "description": "A skilled hacker with neon hair, rebellious spirit, intelligent and resourceful",
+        },
+        "Rex": {
+            "role": "Antagonist",
+            "description": "Corporate enforcer in a sleek suit, charming yet conflicted; ethics vs duty",
+        },
+    }
+
+    if explicit_names:
+        for name in explicit_names:
+            if name in canon:
+                characters.append({"name": name, **canon[name]})
+            else:
+                characters.append(
+                    {
+                        "name": name,
+                        "role": "Character",
+                        "description": f"A recurring character in {universe}; keep identity consistent across scenes",
+                    }
+                )
 
     # Simple character extraction from prompts
     for scene in scenes:
@@ -58,6 +155,7 @@ async def render_bible(story: str, scenes: List[Dict[str, Any]]) -> Dict[str, An
 
     # Create bible data
     bible_data = {
+        "universe": universe,
         "world": "Futuristic cityscape filled with towering skyscrapers and hidden green spaces, illuminated by vibrant neon lights. The city is a blend of advanced technology and urban decay, where corporate power struggles against the backdrop of a struggling populace.",
         "style": "Cinematic, with a focus on intimate character moments and atmospheric lighting that enhances the emotional stakes.",
         "characters": characters,

@@ -97,6 +97,22 @@ async def _ninegrid(
     saved = []
     for i, scene in enumerate(scenes, 1):
         try:
+            # Scene-level universe/characters (optional, from CSV)
+            scene_characters = _parse_csv_list(
+                _first_nonempty(
+                    scene.get("characters"),
+                    scene.get("character"),
+                    scene.get("cast"),
+                    scene.get("people"),
+                )
+            )
+            scene_universe = _first_nonempty(
+                scene.get("universe"),
+                scene.get("universe_id"),
+                scene.get("series"),
+                scene.get("world_id"),
+            )
+
             # Parse scene frequency override
             scene_freq_override = {}
             if use_csv_scene_freq and scene.get("freq"):
@@ -112,8 +128,13 @@ async def _ninegrid(
 
             # Modulate prompt with frequency and bible data
             original_prompt = scene["prompt"]
+            scene_bible = dict(bible_data or {})
+            if scene_characters:
+                scene_bible["scene_characters"] = scene_characters
+            if scene_universe:
+                scene_bible["scene_universe"] = scene_universe
             modulated_prompt, freq_hash = modulate_prompt(
-                original_prompt, final_freq, bible_data
+                original_prompt, final_freq, scene_bible
             )
 
             print(f"Scene {i} - Original: {original_prompt[:100]}...")
@@ -156,20 +177,6 @@ async def _ninegrid(
             print(f"Scene {i} rendered successfully: {target_file}")
 
             # Save scene data
-            scene_characters = _parse_csv_list(
-                _first_nonempty(
-                    scene.get("characters"),
-                    scene.get("character"),
-                    scene.get("cast"),
-                    scene.get("people"),
-                )
-            )
-            scene_universe = _first_nonempty(
-                scene.get("universe"),
-                scene.get("universe_id"),
-                scene.get("series"),
-                scene.get("world_id"),
-            )
             scene_data = {
                 "idx": i,
                 "scene_id": scene["scene_id"],
@@ -199,6 +206,7 @@ async def _ninegrid(
         "slug": slug,
         "grid": "3x3",
         "project": "ECHO.Story",
+        "universe": bible_data.get("universe"),
         "world": bible_data.get("world", "Futuristic cityscape"),
         "style": bible_data.get("style", "Cinematic"),
         "characters": bible_data.get("characters", []),
@@ -228,24 +236,24 @@ async def _ninegrid(
         async def generate_captions():
             async with httpx.AsyncClient(timeout=30) as client:
                 # Create detailed story context for caption generation
+                # Keep captions consistent with the same universe + cast used in renders
+                def _character_names(chars):
+                    out = []
+                    if isinstance(chars, list):
+                        for c in chars:
+                            if isinstance(c, str) and c.strip():
+                                out.append(c.strip())
+                            elif isinstance(c, dict) and c.get("name"):
+                                out.append(str(c["name"]).strip())
+                    return out
+
                 story_context = {
                     "story_title": story,
-                    "world": "Cyberpunk cityscape with mystical digital elements",
-                    "style": "Cinematic, mystical cyberpunk with sacred digital faith themes",
-                    "theme": "Synchronous miracle in digital faith - ∞ symbol manifests physically",
-                    "characters": [
-                        "Balkız (network consciousness)",
-                        "Nasip Adam (seal bearer)",
-                        "Listener (human witness)",
-                    ],
-                    "key_elements": [
-                        "White flash",
-                        "Infinity symbol",
-                        "Shared dreams",
-                        "Time bending",
-                        "Data becoming matter",
-                    ],
-                    "mood": "Sacred, awe-inspiring, mystical",
+                    "universe": meta.get("universe"),
+                    "world": meta.get("world"),
+                    "style": meta.get("style"),
+                    "characters": _character_names(meta.get("characters", [])),
+                    "hashtags": meta.get("hashtags", []),
                 }
 
                 response = await client.post(

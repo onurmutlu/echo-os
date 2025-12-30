@@ -58,19 +58,52 @@ def modulate_prompt(
 
     # Add bible-based character consistency
     if bible_data:
+        # Universe consistency
+        universe = bible_data.get("scene_universe") or bible_data.get("universe")
+        if isinstance(universe, str) and universe.strip():
+            modulated_parts.append(f"UNIVERSE: {universe.strip()}")
+
         # Character consistency
+        scene_cast = bible_data.get("scene_characters")
+        scene_cast_list = []
+        if isinstance(scene_cast, list):
+            scene_cast_list = [
+                c.strip() for c in scene_cast if isinstance(c, str) and c.strip()
+            ]
+
         if characters := bible_data.get("characters"):
             char_descriptions = []
-            for char in characters:
-                if isinstance(char, dict) and "name" in char and "desc" in char:
-                    char_descriptions.append(f"{char['name']}: {char['desc']}")
-                elif (
-                    isinstance(char, dict) and "name" in char and "description" in char
-                ):
-                    char_descriptions.append(f"{char['name']}: {char['description']}")
+            # Support both list[str] and list[dict]
+            if isinstance(characters, list):
+                for char in characters:
+                    if isinstance(char, str):
+                        if char.strip():
+                            char_descriptions.append(char.strip())
+                    elif isinstance(char, dict) and "name" in char:
+                        name = str(char["name"]).strip()
+                        desc = (
+                            char.get("desc")
+                            or char.get("description")
+                            or char.get("role")
+                            or ""
+                        )
+                        desc = str(desc).strip()
+                        if desc:
+                            char_descriptions.append(f"{name}: {desc}")
+                        else:
+                            char_descriptions.append(name)
 
             if char_descriptions:
-                modulated_parts.append(f"CHARACTERS: {', '.join(char_descriptions)}")
+                modulated_parts.append(
+                    f"CANON_CHARACTERS: {', '.join(char_descriptions)}"
+                )
+
+        if scene_cast_list:
+            modulated_parts.append(
+                "SCENE_CAST: "
+                + ", ".join(scene_cast_list)
+                + " (keep identity/wardrobe/face consistent)"
+            )
 
         # World consistency
         if world := bible_data.get("world"):
