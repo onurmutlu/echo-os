@@ -39,6 +39,55 @@ def _first_nonempty(*values: Optional[str]) -> Optional[str]:
     return None
 
 
+def _canon_character_names(bible_data: Dict[str, Any]) -> list[str]:
+    chars = bible_data.get("characters") if isinstance(bible_data, dict) else None
+    out: list[str] = []
+    if isinstance(chars, list):
+        for c in chars:
+            if isinstance(c, str) and c.strip():
+                out.append(c.strip())
+            elif isinstance(c, dict) and c.get("name"):
+                out.append(str(c["name"]).strip())
+    # de-dupe preserving order
+    seen = set()
+    return [n for n in out if not (n in seen or seen.add(n))]
+
+
+def _infer_scene_characters(
+    *, scene_id: Optional[str], prompt: Optional[str], bible_data: Dict[str, Any]
+) -> list[str]:
+    """Infer per-scene cast from scene_id/prompt, falling back to a stable default.
+
+    Goal: keep identity consistent even when CSV doesn't specify characters.
+    """
+    canon = _canon_character_names(bible_data)
+    if not canon:
+        return []
+
+    hay = f"{scene_id or ''} {prompt or ''}".lower()
+    picked: list[str] = []
+    for name in canon:
+        if name and name.lower() in hay:
+            picked.append(name)
+
+    # If nothing matches, prefer "protagonist" role, else first character.
+    if not picked:
+        chars = bible_data.get("characters")
+        if isinstance(chars, list):
+            for c in chars:
+                if (
+                    isinstance(c, dict)
+                    and c.get("name")
+                    and str(c.get("role", "")).lower() == "protagonist"
+                ):
+                    return [str(c["name"]).strip()]
+        return [canon[0]]
+
+    # de-dupe preserving order
+    seen = set()
+    return [n for n in picked if not (n in seen or seen.add(n))]
+
+
 class PipelineIn(BaseModel):
     story: str
     csv_path: str
@@ -112,6 +161,12 @@ async def _ninegrid(
                 scene.get("series"),
                 scene.get("world_id"),
             )
+            if not scene_characters:
+                scene_characters = _infer_scene_characters(
+                    scene_id=scene.get("scene_id"),
+                    prompt=scene.get("prompt"),
+                    bible_data=bible_data or {},
+                )
 
             # Parse scene frequency override
             scene_freq_override = {}
